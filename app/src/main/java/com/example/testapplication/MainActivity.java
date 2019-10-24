@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener {
+public class MainActivity extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener, RecyclerViewAdapter.OnItemListener {
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
     {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(list);
+        recyclerViewAdapter = new RecyclerViewAdapter(list, this);
         recyclerView.setAdapter(recyclerViewAdapter);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
@@ -81,4 +82,10 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
             recyclerViewAdapter.notifyDataSetChanged();
         }
     };
+
+    @Override
+    public void onItemClick(int position)
+    {
+        //What to do when an item in the RecyclerView list is clicked
+    }
 }

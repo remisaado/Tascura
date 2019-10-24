@@ -12,18 +12,20 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.MyViewHolder> {
 
-    ArrayList<String> list;
+    private ArrayList<String> list;
+    private OnItemListener mOnItemListener;
 
-    public RecyclerViewAdapter(ArrayList<String> list)
+    public RecyclerViewAdapter(ArrayList<String> list, OnItemListener onItemListener)
     {
         this.list = list;
+        this.mOnItemListener = onItemListener;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         TextView textView = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(textView);
+        MyViewHolder myViewHolder = new MyViewHolder(textView, mOnItemListener);
 
         return myViewHolder;
     }
@@ -39,14 +41,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         return list.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView textView;
+        OnItemListener onItemListener;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.singleView);
+            this.onItemListener = onItemListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v)
+        {
+            onItemListener.onItemClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnItemListener
+    {
+        void onItemClick(int position);
     }
 }
