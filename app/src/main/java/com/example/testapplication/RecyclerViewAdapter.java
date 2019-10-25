@@ -21,6 +21,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         this.mOnItemListener = onItemListener;
     }
 
+    public RecyclerViewAdapter(ArrayList<String> list) {
+        this.list = list;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -9,66 +9,51 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener, RecyclerViewAdapter.OnItemListener {
+public class TaskItemActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
-    FloatingActionButton fab;
-
-    public static final String TASK_NAME = "com.example.testapplication.TASK";
 
     ArrayList<String> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_task_item);
 
-        fab = findViewById(R.id.floatingActionButton);
         recyclerView = findViewById(R.id.recyclerView);
 
         initRecyclerView();
 
         for (int i = 1; i < 16; i++)
         {
-            list.add("Task " + i);
+            list.add("Subtask " + i);
         }
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                BottomSheetDialog bottomSheet = new BottomSheetDialog();
-                bottomSheet.show(getSupportFragmentManager(), "bottomSheet");
-            }
-        });
+        Intent intent = getIntent();
+        String superTask = intent.getStringExtra(MainActivity.TASK_NAME);
+
+        TextView superTaskTextView = findViewById(R.id.superTaskTextView);
+        superTaskTextView.setText(superTask);
+
     }
 
     private void initRecyclerView()
     {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(list, this);
+        recyclerViewAdapter = new RecyclerViewAdapter(list);
         recyclerView.setAdapter(recyclerViewAdapter);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_line, null));
         recyclerView.addItemDecoration(dividerItemDecoration);
-    }
-
-    @Override
-    public void onAddButtonClicked(String text)
-    {
-        list.add(text);
-        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -83,13 +68,4 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
             recyclerViewAdapter.notifyDataSetChanged();
         }
     };
-
-    @Override
-    public void onItemClick(int position)
-    {
-        String taskName = list.get(position);
-        Intent intent = new Intent(this, TaskItemActivity.class);
-        intent.putExtra(TASK_NAME, taskName);
-        startActivity(intent);
-    }
 }
