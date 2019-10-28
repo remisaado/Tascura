@@ -2,11 +2,14 @@ package com.example.testapplication;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,32 +31,47 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         Button addTaskButton = v.findViewById(R.id.addTaskButton);
         Button cancelButton = v.findViewById(R.id.cancelButton);
 
+        taskEditText.setOnEditorActionListener(editorActionListener);
+
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
-            {
-                String text = taskEditText.getText().toString();
-                if (text.trim().length() > 0)
-                {
-                    mListener.onAddButtonClicked(text);
-
-                    dismiss();
-                } else
-                    {
-                        Toast.makeText(getActivity(), "You did not enter any text", Toast.LENGTH_SHORT).show();
-                    }
-            }
+            {onAddTaskClick();}
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
-            {
-                dismiss();
-            }
+            {dismiss();}
         });
 
         return v;
+    }
+
+    private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+            onAddTaskClick();
+
+            return true;
+        }
+    };
+
+    private void onAddTaskClick()
+    {
+        String text = taskEditText.getText().toString();
+        if (text.trim().length() > 0)
+        {
+            mListener.onAddButtonClicked(text);
+
+            taskEditText.getText().clear();
+
+            Toast.makeText(getActivity(), "New task added", Toast.LENGTH_SHORT).show();
+        } else
+        {
+            Toast.makeText(getActivity(), "You did not enter any text", Toast.LENGTH_SHORT).show();
+        }
     }
 
     interface BottomSheetListener
@@ -65,7 +83,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        try {
+        try
+        {
             mListener = (BottomSheetListener) context;
         } catch (ClassCastException e)
         {

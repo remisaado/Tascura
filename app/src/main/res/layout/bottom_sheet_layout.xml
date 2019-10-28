@@ -15,7 +15,8 @@
         android:inputType="text"
         android:hint="Add new task"
         android:background="@drawable/edit_text_shape"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:imeOptions="actionSend"/>
 
     <GridLayout
         android:layout_width="wrap_content"
