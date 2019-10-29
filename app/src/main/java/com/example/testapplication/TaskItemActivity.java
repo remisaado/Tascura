@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,7 +28,13 @@ public class TaskItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_item);
 
+        RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
         recyclerView = findViewById(R.id.recyclerView);
+        TextView superTaskTextView = findViewById(R.id.superTaskTextView);
+
+        Intent intent = getIntent();
+        String superTask = intent.getStringExtra(MainActivity.TASK_NAME);
+        superTaskTextView.setText(superTask);
 
         initRecyclerView();
 
@@ -35,12 +43,10 @@ public class TaskItemActivity extends AppCompatActivity {
             list.add("Subtask " + i);
         }
 
-        Intent intent = getIntent();
-        String superTask = intent.getStringExtra(MainActivity.TASK_NAME);
-
-        TextView superTaskTextView = findViewById(R.id.superTaskTextView);
-        superTaskTextView.setText(superTask);
-
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {finish();}
+        });
     }
 
     private void initRecyclerView()
