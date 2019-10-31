@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
 
     public static final String TASK_NAME = "com.example.testapplication.TASK";
 
-    ArrayList<String> list = new ArrayList<>();
+    ArrayList<Task> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
 
         for (int i = 1; i < 16; i++)
         {
-            list.add("Task " + i);
+            list.add(new Task("Task " + i, new ArrayList<Task>()));
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
     @Override
     public void onAddButtonClicked(String text)
     {
-        list.add(text);
+        list.add(new Task(text, new ArrayList<Task>()));
         recyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
     @Override
     public void onItemClick(int position)
     {
-        String taskName = list.get(position);
+        String taskName = list.get(position).getTaskName();
         Intent intent = new Intent(this, TaskItemActivity.class);
         intent.putExtra(TASK_NAME, taskName);
         startActivity(intent);

@@ -53,7 +53,7 @@ public class TaskItemActivity extends AppCompatActivity {
     {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(list);
+        //recyclerViewAdapter = new RecyclerViewAdapter(list);
         recyclerView.setAdapter(recyclerViewAdapter);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 

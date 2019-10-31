@@ -12,16 +12,16 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.MyViewHolder> {
 
-    private ArrayList<String> list;
+    private ArrayList<Task> list;
     private OnItemListener mOnItemListener;
 
-    public RecyclerViewAdapter(ArrayList<String> list, OnItemListener onItemListener)
+    public RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
     {
         this.list = list;
         this.mOnItemListener = onItemListener;
     }
 
-    public RecyclerViewAdapter(ArrayList<String> list) {
+    public RecyclerViewAdapter(ArrayList<Task> list) {
         this.list = list;
     }
 
@@ -37,7 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.textView.setText(list.get(position));
+        holder.textView.setText(list.get(position).getTaskName());
     }
 
     @Override
