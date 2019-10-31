@@ -7,7 +7,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +27,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.bottom_sheet_layout, container, false);
 
         taskEditText = v.findViewById(R.id.taskEditText);
-        Button addTaskButton = v.findViewById(R.id.addTaskButton);
-        Button cancelButton = v.findViewById(R.id.cancelButton);
+        View addTaskButton = v.findViewById(R.id.addTaskButton);
 
         taskEditText.setOnEditorActionListener(editorActionListener);
 
@@ -37,12 +35,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v)
             {onAddTaskClick();}
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {dismiss();}
         });
 
         return v;
