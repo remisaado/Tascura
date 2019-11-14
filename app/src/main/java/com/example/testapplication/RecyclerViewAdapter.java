@@ -15,7 +15,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     private ArrayList<Task> list;
     private OnItemListener mOnItemListener;
 
-    public RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
+    RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
     {
         this.list = list;
         this.mOnItemListener = onItemListener;
@@ -29,9 +29,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         TextView textView = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(textView, mOnItemListener);
 
-        return myViewHolder;
+        return new MyViewHolder(textView, mOnItemListener);
     }
 
     @Override
@@ -50,7 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         TextView textView;
         OnItemListener onItemListener;
 
-        public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
+        MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.singleView);
