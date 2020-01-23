@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
     FloatingActionButton fab;
+    Spinner spinner;
 
     public static final String TASK_NAME = "com.example.testapplication.TASK";
 
@@ -31,14 +34,23 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        spinner = findViewById(R.id.spinner);
+
         fab = findViewById(R.id.floatingActionButton);
         recyclerView = findViewById(R.id.recyclerView);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item,
+                getResources().getStringArray(R.array.categories_array));
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(spinnerAdapter);
 
         initRecyclerView();
 
         for (int i = 1; i < 16; i++)
         {
-            list.add(new Task("Task " + i, new ArrayList<Task>()));
+            list.add(new Task("Task " + i));
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
     @Override
     public void onAddButtonClicked(String text)
     {
-        list.add(new Task(text, new ArrayList<Task>()));
+        list.add(new Task(text));
         recyclerViewAdapter.notifyDataSetChanged();
     }
 

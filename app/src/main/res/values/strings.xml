@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">TestApplication</string>
+
+        <string-array name="categories_array">
+            <item>Category one</item>
+            <item>Category two</item>
+            <item>Category three</item>
+            <item>Category four</item>
+            <item>Category five</item>
+            <item>Category six</item>
+            <item>Category seven</item>
+            <item>Category eight</item>
+        </string-array>
+
 </resources>
