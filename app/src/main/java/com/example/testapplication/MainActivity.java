@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -17,13 +18,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener, RecyclerViewAdapter.OnItemListener {
+public class MainActivity extends AppCompatActivity
+        implements BottomSheetDialog.BottomSheetListener, RecyclerViewAdapter.OnItemListener, AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
     FloatingActionButton fab;
-    Spinner spinner;
 
     public static final String TASK_NAME = "com.example.testapplication.TASK";
 
@@ -34,17 +35,10 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinner = findViewById(R.id.spinner);
-
         fab = findViewById(R.id.floatingActionButton);
         recyclerView = findViewById(R.id.recyclerView);
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item,
-                getResources().getStringArray(R.array.categories_array));
-
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(spinnerAdapter);
+        setSpinner();
 
         initRecyclerView();
 
@@ -61,6 +55,18 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
                 bottomSheet.show(getSupportFragmentManager(), "bottomSheet");
             }
         });
+    }
+
+    void setSpinner()
+    {
+        String[] categories = {"Category one", "Category two", "Category three", "Category four", "Category five"};
+
+        Spinner spinner = findViewById(R.id.spinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(this, R.layout.custom_title, android.R.id.text1, categories);
+
+        spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
     private void initRecyclerView()
@@ -103,5 +109,15 @@ public class MainActivity extends AppCompatActivity implements BottomSheetDialog
         Intent intent = new Intent(this, TaskItemActivity.class);
         intent.putExtra(TASK_NAME, taskName);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent)
+    {
     }
 }
