@@ -2,17 +2,23 @@ package com.example.testapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
+import android.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
     FloatingActionButton fab;
+    Toolbar toolBar;
 
     public static final String TASK_NAME = "com.example.testapplication.TASK";
 
@@ -37,6 +44,8 @@ public class MainActivity extends AppCompatActivity
 
         fab = findViewById(R.id.floatingActionButton);
         recyclerView = findViewById(R.id.recyclerView);
+        toolBar = findViewById(R.id.toolBar);
+        toolBar.inflateMenu(R.menu.menu);
 
         setSpinner();
 
