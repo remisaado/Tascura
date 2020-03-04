@@ -2,35 +2,39 @@ package com.example.testapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.PopupMenu;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements BottomSheetDialog.BottomSheetListener, RecyclerViewAdapter.OnItemListener, AdapterView.OnItemSelectedListener {
+        implements RecyclerViewAdapter.OnItemListener, AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
-    FloatingActionButton fab;
+    EditText taskEditText;
+    View addTaskButton;
     Toolbar toolBar;
 
     public static final String TASK_NAME = "com.example.testapplication.TASK";
@@ -42,8 +46,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fab = findViewById(R.id.floatingActionButton);
         recyclerView = findViewById(R.id.recyclerView);
+        taskEditText = findViewById(R.id.taskEditText);
+        addTaskButton = findViewById(R.id.addTaskButton);
         toolBar = findViewById(R.id.toolBar);
         toolBar.inflateMenu(R.menu.menu);
 
@@ -51,19 +56,44 @@ public class MainActivity extends AppCompatActivity
 
         initRecyclerView();
 
+        taskEditText.setOnEditorActionListener(editorActionListener);
+
+        addTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {onAddTaskClick();}
+        });
+
         for (int i = 1; i < 16; i++)
         {
             list.add(new Task("Task " + i));
         }
+    }
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                BottomSheetDialog bottomSheet = new BottomSheetDialog();
-                bottomSheet.show(getSupportFragmentManager(), "bottomSheet");
-            }
-        });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.addList:
+                Toast.makeText(this, "addList selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menuItem2:
+                Toast.makeText(this, "menuItem2 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menuItem3:
+                Toast.makeText(this, "menuItem3 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     void setSpinner()
@@ -91,11 +121,36 @@ public class MainActivity extends AppCompatActivity
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    @Override
-    public void onAddButtonClicked(String text)
+    private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+            onAddTaskClick();
+
+            return true;
+        }
+    };
+
+    private void onAddTaskClick()
     {
-        list.add(new Task(text));
-        recyclerViewAdapter.notifyDataSetChanged();
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //DatabaseReference myRef = database.getReference("List");
+
+        String text = taskEditText.getText().toString();
+        if (text.trim().length() > 0)
+        {
+            list.add(new Task(text));
+            recyclerViewAdapter.notifyDataSetChanged();
+
+            taskEditText.getText().clear();
+
+            //myRef.push().setValue(text);
+
+            Toast.makeText(this, "New task added", Toast.LENGTH_SHORT).show();
+        } else
+        {
+            Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+        }
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

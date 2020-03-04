@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/singleView"
     android:text="Test text"
-    android:layout_margin="16dp"
-    android:textSize="24sp">
+    android:layout_margin="14dp"
+    android:textSize="20sp">
 
 </TextView>

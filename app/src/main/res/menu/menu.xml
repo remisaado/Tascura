@@ -3,8 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/itemOne"
-        android:title="Item one"
+        android:id="@+id/addList"
+        android:title="Add a new list"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menuItem2"
+        android:title="Two"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menuItem3"
+        android:title="Three"
         app:showAsAction="never"/>
 
 </menu>
