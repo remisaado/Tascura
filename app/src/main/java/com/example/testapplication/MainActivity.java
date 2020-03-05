@@ -2,6 +2,7 @@ package com.example.testapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +21,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerViewAdapter recyclerViewAdapter;
     EditText taskEditText;
     View addTaskButton;
-    Toolbar toolBar;
+    Toolbar toolbar;
 
     public static final String TASK_NAME = "com.example.testapplication.TASK";
 
@@ -49,8 +49,13 @@ public class MainActivity extends AppCompatActivity
         recyclerView = findViewById(R.id.recyclerView);
         taskEditText = findViewById(R.id.taskEditText);
         addTaskButton = findViewById(R.id.addTaskButton);
-        toolBar = findViewById(R.id.toolBar);
-        toolBar.inflateMenu(R.menu.menu);
+        toolbar = findViewById(R.id.toolbar);
+
+        if (toolbar != null)
+        {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         setSpinner();
 
