@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity
         switch(item.getItemId())
         {
             case R.id.addList:
-                Toast.makeText(this, "addList selected", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, AddListActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem2:
                 Toast.makeText(this, "menuItem2 selected", Toast.LENGTH_SHORT).show();
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity
         //DatabaseReference myRef = database.getReference("List");
 
         String text = taskEditText.getText().toString();
+
         if (text.trim().length() > 0)
         {
             list.add(new Task(text));
@@ -153,9 +155,9 @@ public class MainActivity extends AppCompatActivity
 
             Toast.makeText(this, "New task added", Toast.LENGTH_SHORT).show();
         } else
-        {
-            Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
-        }
+            {
+                Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+            }
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
