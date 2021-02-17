@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:hint="Enter new task"
             android:background="@drawable/edit_text_shape"
             android:padding="10dp"

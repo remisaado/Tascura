@@ -53,13 +53,14 @@ public class AddListActivity extends AppCompatActivity {
     private void onAddListClick()
     {
         String text = listEditText.getText().toString();
+        String refPath = "CategoryList";
 
         if (text.trim().length() > 0)
         {
-            //FirebaseDatabase database = FirebaseDatabase.getInstance();
-            //DatabaseReference myRef = database.getReference(text);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference(refPath);
 
-            //myRef.push().setValue(text);
+            myRef.push().setValue(text);
 
             listEditText.getText().clear();
 

@@ -22,17 +22,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements RecyclerViewAdapter.OnItemListener, AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerView;
+    private List<String> categories = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
+    ArrayAdapter<String> spinnerAdapter;
     EditText taskEditText;
     View addTaskButton;
     Toolbar toolbar;
@@ -91,12 +97,6 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(this, AddListActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.menuItem2:
-                Toast.makeText(this, "menuItem2 selected", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.menuItem3:
-                Toast.makeText(this, "menuItem3 selected", Toast.LENGTH_SHORT).show();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -104,10 +104,29 @@ public class MainActivity extends AppCompatActivity
 
     void setSpinner()
     {
-        String[] categories = {"Category one", "Category two", "Category three", "Category four", "Category five"};
+        String refPath = "CategoryList";
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference().child(refPath);
 
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                categories.clear();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
+                    categories.add(snapshot.getValue().toString());
+                    spinnerAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(this, R.layout.custom_title, android.R.id.text1, categories);
+        spinnerAdapter = new ArrayAdapter(this, R.layout.custom_title, android.R.id.text1, categories);
 
         spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner);
         spinner.setAdapter(spinnerAdapter);
