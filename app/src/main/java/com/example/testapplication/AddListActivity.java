@@ -53,17 +53,15 @@ public class AddListActivity extends AppCompatActivity {
     private void onAddListClick()
     {
         String text = listEditText.getText().toString();
-        String refPath = "CategoryList";
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("CategoryList");
 
         if (text.trim().length() > 0)
         {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference(refPath);
-
             myRef.push().setValue(text);
 
             listEditText.getText().clear();
 
+            Toast.makeText(this, "New list added", Toast.LENGTH_SHORT).show();
             finish();
         } else
             {

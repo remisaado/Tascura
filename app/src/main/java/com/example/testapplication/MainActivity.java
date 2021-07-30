@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     ArrayAdapter<String> spinnerAdapter;
     EditText taskEditText;
     View addTaskButton;
+    Spinner spinner;
     Toolbar toolbar;
 
     public static final String TASK_NAME = "com.example.testapplication.TASK";
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView = findViewById(R.id.recyclerView);
         taskEditText = findViewById(R.id.taskEditText);
         addTaskButton = findViewById(R.id.addTaskButton);
+        spinner = findViewById(R.id.spinner);
         toolbar = findViewById(R.id.toolbar);
 
         if (toolbar != null)
@@ -74,11 +76,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v)
             {onAddTaskClick();}
         });
-
-        for (int i = 1; i < 16; i++)
-        {
-            list.add(new Task("Task " + i));
-        }
     }
 
     @Override
@@ -104,9 +101,7 @@ public class MainActivity extends AppCompatActivity
 
     void setSpinner()
     {
-        String refPath = "CategoryList";
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child(refPath);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child("CategoryList");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -125,7 +120,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        Spinner spinner = findViewById(R.id.spinner);
         spinnerAdapter = new ArrayAdapter(this, R.layout.custom_title, android.R.id.text1, categories);
 
         spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner);
@@ -158,10 +152,10 @@ public class MainActivity extends AppCompatActivity
 
     private void onAddTaskClick()
     {
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference myRef = database.getReference("List");
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("TaskList");
 
         String text = taskEditText.getText().toString();
+        String spinnerValue = spinner.getSelectedItem().toString();
 
         if (text.trim().length() > 0)
         {
@@ -170,8 +164,8 @@ public class MainActivity extends AppCompatActivity
 
             taskEditText.getText().clear();
 
-            //myRef.push().setValue(text);
-
+            myRef.child(spinnerValue).push().setValue(text);
+            
             Toast.makeText(this, "New task added", Toast.LENGTH_SHORT).show();
         } else
             {
@@ -204,6 +198,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
+        String spinnerValue = spinner.getSelectedItem().toString();
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("TaskList").child(spinnerValue);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
+                recyclerViewAdapter.notifyDataSetChanged();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
+                    list.add(new Task(snapshot.getValue().toString()));
+                    recyclerViewAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
