@@ -155,22 +155,31 @@ public class MainActivity extends AppCompatActivity
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("TaskList");
 
         String text = taskEditText.getText().toString();
-        String spinnerValue = spinner.getSelectedItem().toString();
+        String spinnerValue;
 
-        if (text.trim().length() > 0)
+        if(spinner.getSelectedItem() != null)
         {
-            list.add(new Task(text));
-            recyclerViewAdapter.notifyDataSetChanged();
+            spinnerValue = spinner.getSelectedItem().toString();
 
-            taskEditText.getText().clear();
+            if (text.trim().length() > 0)
+            {
+                list.add(new Task(text));
+                recyclerViewAdapter.notifyDataSetChanged();
 
-            myRef.child(spinnerValue).push().setValue(text);
-            
-            Toast.makeText(this, "New task added", Toast.LENGTH_SHORT).show();
+                taskEditText.getText().clear();
+
+                myRef.child(spinnerValue).push().setValue(text);
+
+                Toast.makeText(this, "New task added", Toast.LENGTH_SHORT).show();
+            } else
+                {
+                    Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+                }
         } else
             {
-                Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Spinner is empty!", Toast.LENGTH_SHORT).show();
             }
+
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -181,6 +190,10 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("TaskList");
+            DatabaseReference ref = myRef.push();
+            String key = ref.getKey();
+            Toast.makeText(MainActivity.this, key, Toast.LENGTH_SHORT).show();
             list.remove(viewHolder.getAdapterPosition());
             recyclerViewAdapter.notifyDataSetChanged();
         }

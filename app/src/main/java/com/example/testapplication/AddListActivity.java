@@ -58,7 +58,6 @@ public class AddListActivity extends AppCompatActivity {
         if (text.trim().length() > 0)
         {
             myRef.push().setValue(text);
-
             listEditText.getText().clear();
 
             Toast.makeText(this, "New list added", Toast.LENGTH_SHORT).show();
