@@ -1,5 +1,6 @@
 package com.example.testapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,8 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AddListActivity extends AppCompatActivity {
 
@@ -50,21 +54,39 @@ public class AddListActivity extends AppCompatActivity {
         }
     };
 
+
+
     private void onAddListClick()
     {
-        String text = listEditText.getText().toString();
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("CategoryList");
+        final String text = listEditText.getText().toString();
+        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("CategoryList");
 
-        if (text.trim().length() > 0)
-        {
-            myRef.push().setValue(text);
-            listEditText.getText().clear();
+        myRef.orderByValue().equalTo(text).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    Toast.makeText(AddListActivity.this, "This list already exists", Toast.LENGTH_SHORT).show();
+                } else
+                    {
+                        if (text.trim().length() > 0)
+                        {
+                            myRef.push().setValue(text);
+                            listEditText.getText().clear();
 
-            Toast.makeText(this, "New list added", Toast.LENGTH_SHORT).show();
-            finish();
-        } else
-            {
-                Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddListActivity.this, "New list added", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else
+                        {
+                            Toast.makeText(AddListActivity.this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+                        }
+                    }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
