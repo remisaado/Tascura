@@ -54,8 +54,6 @@ public class AddListActivity extends AppCompatActivity {
         }
     };
 
-
-
     private void onAddListClick()
     {
         final String text = listEditText.getText().toString();
