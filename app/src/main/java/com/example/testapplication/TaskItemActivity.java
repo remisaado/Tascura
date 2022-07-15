@@ -33,16 +33,16 @@ public class TaskItemActivity extends AppCompatActivity {
         TextView superTaskTextView = findViewById(R.id.superTaskTextView);
 
         Intent intent = getIntent();
-        String superTask = intent.getStringExtra(MainActivity.TASK_NAME);
+        String superTask = intent.getStringExtra(MainActivity.KEY_NAME);
         superTaskTextView.setText(superTask);
 
         initRecyclerView();
-
+        /*
         for (int i = 1; i < 16; i++)
         {
             list.add("Subtask " + i);
         }
-
+        */
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {finish();}

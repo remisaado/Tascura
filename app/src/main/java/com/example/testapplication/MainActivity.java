@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,24 +30,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements RecyclerViewAdapter.OnItemListener, AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerView;
-    private List<String> categories = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
-    ArrayAdapter<String> spinnerAdapter;
+    ArrayAdapter<Category> spinnerAdapter;
     EditText taskEditText;
     View addTaskButton;
     Spinner spinner;
     Toolbar toolbar;
 
-    public static final String TASK_NAME = "com.example.testapplication.TASK";
+    public static final String KEY_NAME = "com.example.testapplication.KEY";
 
     ArrayList<Task> list = new ArrayList<>();
+    ArrayList<Category> categories = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         {
             case R.id.addList:
                 Intent intent = new Intent(this, AddListActivity.class);
+                intent.putParcelableArrayListExtra(KEY_NAME, categories);
                 startActivity(intent);
                 return true;
             default:
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
-                    categories.add(snapshot.getValue().toString());
+                    categories.add(new Category(snapshot.getValue().toString(), snapshot.getKey()));
                     spinnerAdapter.notifyDataSetChanged();
                 }
             }
@@ -121,7 +122,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         spinnerAdapter = new ArrayAdapter(this, R.layout.custom_title, android.R.id.text1, categories);
-
         spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(this);
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity
     {
         String taskName = list.get(position).getTaskName();
         Intent intent = new Intent(this, TaskItemActivity.class);
-        intent.putExtra(TASK_NAME, taskName);
+        intent.putExtra(KEY_NAME, taskName);
         startActivity(intent);
     }
 
@@ -221,23 +221,22 @@ public class MainActivity extends AppCompatActivity
         String spinnerValue = spinner.getSelectedItem().toString();
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("TaskList").child(spinnerValue);
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list.clear();
-                recyclerViewAdapter.notifyDataSetChanged();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                {
-                    list.add(new Task(snapshot.getValue().toString(), snapshot.getKey()));
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    list.clear();
                     recyclerViewAdapter.notifyDataSetChanged();
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        list.add(new Task(snapshot.getValue().toString(), snapshot.getKey()));
+                        recyclerViewAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
     }
 
     @Override

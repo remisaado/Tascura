@@ -13,18 +13,43 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.MyViewHolder> {
 
     private ArrayList<Task> list;
+//    private ArrayList<String> categories;
     private OnItemListener mOnItemListener;
+
+//    class ViewHolder1 extends RecyclerView.ViewHolder
+//    {
+//        public ViewHolder1(@NonNull View itemView) {
+//            super(itemView);
+//        }
+//    }
+//
+//    class ViewHolder2 extends RecyclerView.ViewHolder
+//    {
+//        public ViewHolder2(@NonNull View itemView) {
+//            super(itemView);
+//        }
+//    }
 
     RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
     {
         this.list = list;
         this.mOnItemListener = onItemListener;
     }
-
+    /*
     public RecyclerViewAdapter(ArrayList<Task> list) {
         this.list = list;
     }
-
+    */
+//    RecyclerViewAdapter(ArrayList<String> categories)
+//    {
+//        this.categories = categories;
+//    }
+/*
+    @Override
+    public int getItemViewType(int position)
+    {
+    }
+*/
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,7 +60,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
         holder.textView.setText(list.get(position).getTaskName());
     }
 
