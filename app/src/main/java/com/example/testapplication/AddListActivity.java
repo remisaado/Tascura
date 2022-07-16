@@ -137,14 +137,17 @@ public class AddListActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("CategoryList");
+            DatabaseReference taskListRef = FirebaseDatabase.getInstance().getReference("TaskList");
 
             String categoryId = categories.get(viewHolder.getAdapterPosition()).getCategoryId();
+            String categoryName = categories.get(viewHolder.getAdapterPosition()).getCategoryName();
 
             if (categories.size() > 1)
             {
                 categories.remove(viewHolder.getAdapterPosition());
 
                 myRef.child(categoryId).removeValue();
+                taskListRef.child(categoryName).removeValue();
             }
             else
                 {
