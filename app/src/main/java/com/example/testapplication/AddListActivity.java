@@ -140,10 +140,16 @@ public class AddListActivity extends AppCompatActivity {
 
             String categoryId = categories.get(viewHolder.getAdapterPosition()).getCategoryId();
 
-            categories.remove(viewHolder.getAdapterPosition());
+            if (categories.size() > 1)
+            {
+                categories.remove(viewHolder.getAdapterPosition());
 
-            myRef.child(categoryId).removeValue();
-
+                myRef.child(categoryId).removeValue();
+            }
+            else
+                {
+                    Toast.makeText(AddListActivity.this, "You cannot delete last remaining list", Toast.LENGTH_SHORT).show();
+                }
             listsRecyclerViewAdapter.notifyDataSetChanged();
         }
     };
