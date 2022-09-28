@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_background"
+    android:paddingHorizontal="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log In"
+        android:textSize="30sp"
+        android:layout_marginTop="80dp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"/>
+
+    <EditText
+        android:id="@+id/logInEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_text_background"
+        android:textColorHint="@color/colorLight"
+        android:textColor="@color/colorLight"
+        android:padding="16dp"
+        android:minHeight="50dp"/>
+
+    <EditText
+        android:id="@+id/logInPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_background"
+        android:textColorHint="@color/colorLight"
+        android:textColor="@color/colorLight"
+        android:padding="16dp"
+        android:minHeight="50dp"/>
+
+    <Button
+        android:id="@+id/logInButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log In"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/registerHereTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Don't have an account? Register here!"
+        android:gravity="center_horizontal"/>
+
+</LinearLayout>

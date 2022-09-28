@@ -7,4 +7,9 @@
         android:title="Add New List"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/logOut"
+        android:title="Log Out"
+        app:showAsAction="never"/>
+
 </menu>
