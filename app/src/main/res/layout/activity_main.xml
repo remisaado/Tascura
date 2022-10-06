@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
-            android:indeterminateTint="@color/colorLight"/>
+            android:indeterminateTint="@android:color/white"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -66,14 +66,16 @@
             android:id="@+id/taskEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:inputType="textCapSentences"
-            android:hint="Enter new task"
+            android:layout_centerVertical="true"
             android:background="@drawable/edit_text_shape"
+            android:hint="@string/enter_new_task"
+            android:imeOptions="actionSend"
+            android:inputType="textCapSentences"
+            android:maxLines="1"
             android:padding="10dp"
             android:paddingEnd="35dp"
-            android:imeOptions="actionSend"
-            android:layout_centerVertical="true"/>
+            android:importantForAutofill="no"
+            tools:ignore="RtlSymmetry" />
 
         <View
             android:id="@+id/addTaskButton"

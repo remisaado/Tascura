@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,10 +42,7 @@ public class TaskItemActivity extends AppCompatActivity {
             list.add("Subtask " + i);
         }
         */
-        relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {finish();}
-        });
+        relativeLayout.setOnClickListener(v -> finish());
     }
 
     private void initRecyclerView()

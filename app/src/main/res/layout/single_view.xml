@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/singleView"
-    android:text="Test text"
+    android:text=""
     android:layout_margin="14dp"
     android:textSize="20sp">
 

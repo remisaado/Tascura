@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -78,11 +75,7 @@ public class MainActivity extends AppCompatActivity
 
         taskEditText.setOnEditorActionListener(editorActionListener);
 
-        addTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {onAddTaskClick();}
-        });
+        addTaskButton.setOnClickListener(v -> onAddTaskClick());
     }
 
     @Override
@@ -113,7 +106,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
-            case R.id.addList:
+            case R.id.manageLists:
                 Intent intent = new Intent(this, AddListActivity.class);
                 intent.putParcelableArrayListExtra(KEY_NAME, categories);
                 startActivity(intent);
@@ -177,14 +170,11 @@ public class MainActivity extends AppCompatActivity
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    private TextView.OnEditorActionListener editorActionListener = (v, actionId, event) -> {
 
-            onAddTaskClick();
+        onAddTaskClick();
 
-            return true;
-        }
+        return true;
     };
 
     private void onAddTaskClick()

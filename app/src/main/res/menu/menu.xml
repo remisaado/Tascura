@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/addList"
-        android:title="Add New List"
+        android:id="@+id/manageLists"
+        android:title="@string/menu_manage_lists"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/logOut"
-        android:title="Log Out"
+        android:title="@string/menu_log_out"
         app:showAsAction="never"/>
 
 </menu>

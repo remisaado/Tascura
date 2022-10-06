@@ -1,21 +1,17 @@
 package com.example.testapplication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,17 +34,9 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        logInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {logInUser();}
-        });
+        logInButton.setOnClickListener(view -> logInUser());
 
-        registerHereTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
-        });
+        registerHereTextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
     }
 
     private void logInUser()
@@ -68,17 +56,34 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful())
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (!task.isSuccessful())
+                {
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                    switch (errorCode)
                     {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        case "ERROR_INVALID_EMAIL":
+                        case "ERROR_EMAIL_ALREADY_IN_USE":
+                            logInEmailEditText.setError(task.getException().getMessage());
+                            logInEmailEditText.requestFocus();
+                            break;
+                        case "ERROR_WRONG_PASSWORD":
+                            logInPasswordEditText.setError(task.getException().getMessage());
+                            logInPasswordEditText.requestFocus();
+                            logInPasswordEditText.setText("");
+                            break;
+                        case "ERROR_WEAK_PASSWORD":
+                            logInPasswordEditText.setError(task.getException().getMessage());
+                            logInPasswordEditText.requestFocus();
+                            break;
+                        default:
+                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                    else
-                    {
-                        Toast.makeText(LoginActivity.this, "Log in error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                }
+                else
+                {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             });
         }

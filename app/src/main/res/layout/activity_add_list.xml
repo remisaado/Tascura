@@ -24,7 +24,7 @@
             android:id="@+id/createListTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create a new list"
+            android:text="@string/create_a_new_list"
             android:textSize="24sp"
             android:gravity="center"/>
 
@@ -47,12 +47,14 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:inputType="textCapWords"
-            android:hint="Enter name of new list"
+            android:hint="@string/enter_name_of_new_list"
             android:background="@drawable/edit_text_shape"
             android:padding="10dp"
             android:paddingEnd="35dp"
             android:imeOptions="actionSend"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            tools:ignore="RtlSymmetry"
+            android:importantForAutofill="no" />
 
         <View
             android:id="@+id/addListButton"

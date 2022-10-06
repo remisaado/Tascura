@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,16 +54,9 @@ public class AddListActivity extends AppCompatActivity {
 
         listEditText.setOnEditorActionListener(editorActionListener);
 
-        addListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {onAddListClick();}
-        });
+        addListButton.setOnClickListener(v -> onAddListClick());
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {finish();}
-        });
+        backButton.setOnClickListener(v -> finish());
     }
 
     private void initRecyclerView()
@@ -81,13 +73,10 @@ public class AddListActivity extends AppCompatActivity {
 
     }
 
-    private TextView.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            onAddListClick();
+    private final TextView.OnEditorActionListener editorActionListener = (v, actionId, event) -> {
+        onAddListClick();
 
-            return true;
-        }
+        return true;
     };
 
     private void onAddListClick()
@@ -98,6 +87,7 @@ public class AddListActivity extends AppCompatActivity {
         final String text = listEditText.getText().toString();
 
         categoryDBRef.orderByValue().equalTo(text).addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists())

@@ -24,7 +24,7 @@ public class ListsRecyclerViewAdapter extends RecyclerView.Adapter<ListsRecycler
     public ListsRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         TextView textView = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
 
-        return new ListsRecyclerViewAdapter.MyViewHolder(textView);
+        return new MyViewHolder(textView);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ListsRecyclerViewAdapter extends RecyclerView.Adapter<ListsRecycler
         return categories == null ? 0 : categories.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder
+    public static class MyViewHolder extends RecyclerView.ViewHolder
     {
         TextView textView;
 

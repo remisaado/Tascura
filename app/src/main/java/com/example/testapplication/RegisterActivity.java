@@ -1,21 +1,17 @@
 package com.example.testapplication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -37,18 +33,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {createUser();}
-        });
+        registerButton.setOnClickListener(view -> createUser());
 
-        logInHereTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-            }
-        });
+        logInHereTextView.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
     }
 
     private void createUser()
@@ -68,18 +55,35 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else
         {
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful())
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (!task.isSuccessful())
+                {
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                    switch (errorCode)
                     {
-                        Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                        case "ERROR_INVALID_EMAIL":
+                        case "ERROR_EMAIL_ALREADY_IN_USE":
+                            registerEmailEditText.setError(task.getException().getMessage());
+                            registerEmailEditText.requestFocus();
+                            break;
+                        case "ERROR_WRONG_PASSWORD":
+                            registerPasswordEditText.setError(task.getException().getMessage());
+                            registerPasswordEditText.requestFocus();
+                            registerPasswordEditText.setText("");
+                            break;
+                        case "ERROR_WEAK_PASSWORD":
+                            registerPasswordEditText.setError(task.getException().getMessage());
+                            registerPasswordEditText.requestFocus();
+                            break;
+                        default:
+                            Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                    else
-                    {
-                        Toast.makeText(RegisterActivity.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                }
+                else
+                {
+                    Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 }
             });
         }
