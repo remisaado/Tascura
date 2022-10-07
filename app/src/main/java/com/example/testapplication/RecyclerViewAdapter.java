@@ -56,7 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         @Override
         public void onClick(View v)
         {
-            onItemListener.onItemClick(getAdapterPosition());
+            onItemListener.onItemClick(getBindingAdapterPosition());
         }
     }
 

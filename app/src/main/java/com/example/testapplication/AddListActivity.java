@@ -135,12 +135,12 @@ public class AddListActivity extends AppCompatActivity {
             final DatabaseReference categoryDBRef = FirebaseDatabase.getInstance().getReference(userId).child("CategoryList");
             DatabaseReference taskDBRef = FirebaseDatabase.getInstance().getReference(userId).child("TaskList");
 
-            String categoryId = categories.get(viewHolder.getAdapterPosition()).getCategoryId();
-            String categoryName = categories.get(viewHolder.getAdapterPosition()).getCategoryName();
+            String categoryId = categories.get(viewHolder.getBindingAdapterPosition()).getCategoryId();
+            String categoryName = categories.get(viewHolder.getBindingAdapterPosition()).getCategoryName();
 
             if (categories.size() > 1)
             {
-                categories.remove(viewHolder.getAdapterPosition());
+                categories.remove(viewHolder.getBindingAdapterPosition());
 
                 categoryDBRef.child(categoryId).removeValue();
                 taskDBRef.child(categoryName).removeValue();

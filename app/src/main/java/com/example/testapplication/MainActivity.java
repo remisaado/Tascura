@@ -225,9 +225,9 @@ public class MainActivity extends AppCompatActivity
             DatabaseReference taskDBRef = FirebaseDatabase.getInstance().getReference(userId).child("TaskList");
             String spinnerValue = spinner.getSelectedItem().toString();
 
-            String taskId = list.get(viewHolder.getAdapterPosition()).getTaskId();
+            String taskId = list.get(viewHolder.getBindingAdapterPosition()).getTaskId();
 
-            list.remove(viewHolder.getAdapterPosition());
+            list.remove(viewHolder.getBindingAdapterPosition());
 
             taskDBRef.child(spinnerValue).child(taskId).removeValue();
 
