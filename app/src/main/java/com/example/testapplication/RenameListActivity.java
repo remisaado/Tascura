@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,19 +44,26 @@ public class RenameListActivity extends AppCompatActivity {
         String spinnerValue = categories.get(spinnerPosition).getCategoryName();
         listEditText.setText(spinnerValue);
 
-//        listEditText.setOnEditorActionListener(editorActionListener);
+        listEditText.setOnEditorActionListener(editorActionListener);
 
         renameListButton.setOnClickListener(v -> onRenameListClick());
 
         backButton.setOnClickListener(v -> finish());
     }
 
+    private final TextView.OnEditorActionListener editorActionListener = (v, actionId, event) -> {
+        onRenameListClick();
+
+        return true;
+    };
+
     private void onRenameListClick()
     {
         String userId = mAuth.getCurrentUser().getUid();
-        final DatabaseReference categoryDBRef = FirebaseDatabase.getInstance().getReference(userId).child("CategoryList");
 
         String categoryId = categories.get(spinnerPosition).getCategoryId();
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId).child(categoryId);
 
         final String text = listEditText.getText().toString();
 
@@ -64,7 +72,7 @@ public class RenameListActivity extends AppCompatActivity {
 
         if (text.trim().length() > 0)
         {
-            categoryDBRef.updateChildren(newValue);
+            databaseReference.updateChildren(newValue);
 
             Toast.makeText(this, "List name updated", Toast.LENGTH_SHORT).show();
 
