@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity
     FirebaseAuth mAuth;
 
     public static final String KEY_NAME = "com.example.testapplication.KEY";
+    public static final String KEY_NAME_TWO = "com.example.testapplication.KEYTWO";
     public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String SPINNER_CHOICE = "spinnerChoice";
 
     ArrayList<Task> list = new ArrayList<>();
     ArrayList<Category> categories = new ArrayList<>();
@@ -111,9 +113,15 @@ public class MainActivity extends AppCompatActivity
         switch(item.getItemId())
         {
             case R.id.manageLists:
-                Intent intent = new Intent(this, AddListActivity.class);
-                intent.putParcelableArrayListExtra(KEY_NAME, categories);
-                startActivity(intent);
+                Intent addIntent = new Intent(this, AddListActivity.class);
+                addIntent.putParcelableArrayListExtra(KEY_NAME, categories);
+                startActivity(addIntent);
+                return true;
+            case R.id.renameList:
+                Intent renameIntent = new Intent(this, RenameListActivity.class);
+                renameIntent.putParcelableArrayListExtra(KEY_NAME, categories);
+                renameIntent.putExtra(KEY_NAME_TWO, spinner.getSelectedItemPosition());
+//                startActivity(renameIntent);
                 return true;
             case R.id.logOut:
                 mAuth.signOut();
@@ -166,8 +174,8 @@ public class MainActivity extends AppCompatActivity
     void loadData()
     {
         SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
-        int spinnerChoice = sharedPrefs.getInt("spinnerChoice", 0);
-        spinner.setSelection(spinnerChoice);
+        int spinnerChoice = sharedPrefs.getInt(SPINNER_CHOICE, 0);
+        spinner.setSelection(spinnerChoice, true);
     }
 
     private void initRecyclerView()
@@ -260,12 +268,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
-        int spinnerChoice = spinner.getSelectedItemPosition();
-        SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
-        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
-        sharedPrefsEditor.putInt("spinnerChoice", spinnerChoice);
-        sharedPrefsEditor.apply();
-
         String spinnerValue = spinner.getSelectedItem().toString();
         String userId = mAuth.getCurrentUser().getUid();
         DatabaseReference taskDBRef = FirebaseDatabase.getInstance().getReference(userId).child("TaskList").child(spinnerValue);
@@ -295,5 +297,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onNothingSelected(AdapterView<?> parent)
     {
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        int spinnerChoice = spinner.getSelectedItemPosition();
+        SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        sharedPrefsEditor.putInt(SPINNER_CHOICE, spinnerChoice);
+        sharedPrefsEditor.apply();
     }
 }

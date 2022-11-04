@@ -9,7 +9,9 @@
     <string name="log_in_here">Already have an account? Log in here!</string>
     <string name="register_here">Don\'t have an account? Register here!</string>
     <string name="register">Register</string>
+    <string name="change_list_name">Change list name</string>
 
     <string name="menu_manage_lists">Manage Lists</string>
     <string name="menu_log_out">Log Out</string>
+    <string name="menu_rename_list">Rename List</string>
 </resources>

@@ -112,7 +112,7 @@ public class AddListActivity extends AppCompatActivity {
 
                             SharedPreferences sharedPrefs = getSharedPreferences(MainActivity.SHARED_PREFS, 0);
                             SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
-                            sharedPrefsEditor.putInt("spinnerChoice", categories.size() - 1);
+                            sharedPrefsEditor.putInt(MainActivity.SPINNER_CHOICE, categories.size() - 1);
                             sharedPrefsEditor.apply();
 
                             finish();
@@ -149,11 +149,11 @@ public class AddListActivity extends AppCompatActivity {
             {
                 SharedPreferences sharedPrefs = getSharedPreferences(MainActivity.SHARED_PREFS, 0);
                 SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
-                int spinnerChoice = sharedPrefs.getInt("spinnerChoice", 0);
+                int spinnerChoice = sharedPrefs.getInt(MainActivity.SPINNER_CHOICE, 0);
                
                 if (viewHolder.getBindingAdapterPosition() == spinnerChoice)
                 {
-                    sharedPrefsEditor.putInt("spinnerChoice", 0);
+                    sharedPrefsEditor.putInt(MainActivity.SPINNER_CHOICE, 0);
                     sharedPrefsEditor.apply();
                 }
 
