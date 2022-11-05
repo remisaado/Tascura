@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity
                         categories.add(new Category(snapshot.child(snapshot.getKey()).getValue().toString(), snapshot.getKey()));
                         spinnerAdapter.notifyDataSetChanged();
                     }
+                    loadData();
                 }
             }
 
@@ -172,8 +173,6 @@ public class MainActivity extends AppCompatActivity
         spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(this);
-
-        loadData();
     }
 
     void loadData()
