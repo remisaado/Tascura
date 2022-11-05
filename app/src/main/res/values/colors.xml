@@ -8,4 +8,5 @@
     <color name="colorPrimaryTransparent">#2606798D</color>
     <color name="colorPrimaryDarkTransparent">#2600001A</color>
     <color name="colorAccentTransparent">#2607404B</color>
+    <color name="colorRed">#D21414</color>
 </resources>
