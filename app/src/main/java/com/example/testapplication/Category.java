@@ -40,6 +40,11 @@ public class Category implements Parcelable {
         return categoryId;
     }
 
+    public void setCategoryName(String categoryName)
+    {
+        this.categoryName = categoryName;
+    }
+
     @Override
     public int describeContents() {
         return 0;

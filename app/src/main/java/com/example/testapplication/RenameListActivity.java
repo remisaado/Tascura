@@ -72,6 +72,7 @@ public class RenameListActivity extends AppCompatActivity {
 
         if (text.trim().length() > 0)
         {
+            categories.get(spinnerPosition).setCategoryName(text);
             databaseReference.updateChildren(newValue);
 
             Toast.makeText(this, "List name updated", Toast.LENGTH_SHORT).show();
