@@ -11,7 +11,8 @@
     <string name="register">Register</string>
     <string name="change_list_name">Change list name</string>
 
-    <string name="menu_manage_lists">Manage Lists</string>
-    <string name="menu_log_out">Log Out</string>
+    <string name="menu_add_list">Add List</string>
     <string name="menu_rename_list">Rename List</string>
+    <string name="menu_delete_list">Delete List</string>
+    <string name="menu_log_out">Log Out</string>
 </resources>

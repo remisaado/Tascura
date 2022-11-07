@@ -1,6 +1,7 @@
 package com.example.testapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
-            case R.id.manageLists:
+            case R.id.addList:
                 Intent addIntent = new Intent(this, AddListActivity.class);
                 addIntent.putParcelableArrayListExtra(KEY_NAME, categories);
                 startActivity(addIntent);
@@ -124,6 +126,9 @@ public class MainActivity extends AppCompatActivity
                 renameIntent.putParcelableArrayListExtra(KEY_NAME, categories);
                 renameIntent.putExtra(KEY_NAME_TWO, spinner.getSelectedItemPosition());
                 startActivity(renameIntent);
+                return true;
+            case R.id.deleteList:
+                deleteListDialog();
                 return true;
             case R.id.logOut:
                 mAuth.signOut();
@@ -200,6 +205,81 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     };
+
+    private void deleteListDialog()
+    {
+        String userId = mAuth.getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+
+        int spinnerPosition = spinner.getSelectedItemPosition();
+        String categoryId = categories.get(spinnerPosition).getCategoryId();
+
+        if (categories.size() > 1)
+        {
+            databaseReference.child(categoryId).child("Tasks").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists())
+                    {
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        deleteList();
+                                        break;
+
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        break;
+                                }
+                            }
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.DialogTheme);
+                        builder.setTitle("Delete this list?")
+                                .setMessage("All tasks in this list will be deleted")
+                                .setPositiveButton("Delete", dialogClickListener)
+                                .setNegativeButton("Cancel", dialogClickListener).show();
+                    }
+                    else
+                    {
+                        deleteList();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else
+        {
+            Toast.makeText(this, "You cannot delete default list", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void deleteList()
+    {
+        String userId = mAuth.getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+
+        int spinnerPosition = spinner.getSelectedItemPosition();
+        String categoryId = categories.get(spinnerPosition).getCategoryId();
+
+        SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+
+        sharedPrefsEditor.putInt(SPINNER_CHOICE, 0);
+        sharedPrefsEditor.apply();
+
+        categories.remove(spinnerPosition);
+
+        databaseReference.child(categoryId).removeValue();
+
+        loadData();
+        Toast.makeText(this, "List deleted", Toast.LENGTH_SHORT).show();
+    }
 
     private void onAddTaskClick()
     {
