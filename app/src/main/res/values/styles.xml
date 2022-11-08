@@ -3,17 +3,18 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="colorAccent">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:navigationBarColor">@color/colorSecondary</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Customize your theme here. -->
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:background">@color/colorAccent</item>
+        <item name="android:background">@color/colorSecondary</item>
     </style>
 
 </resources>

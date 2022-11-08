@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@color/colorSecondary"
     android:orientation="vertical"
     tools:context=".RenameListActivity">
 
@@ -52,6 +52,7 @@
             android:paddingEnd="35dp"
             android:imeOptions="actionSend"
             android:layout_centerVertical="true"
+            android:textColor="@color/colorText"
             tools:ignore="RtlSymmetry"
             android:importantForAutofill="no" />
 

@@ -14,7 +14,6 @@
         android:text="@string/log_in"
         android:textSize="30sp"
         android:layout_marginTop="120dp"
-        android:textColor="@android:color/white"
         android:textStyle="bold"
         android:gravity="center_horizontal"/>
 
