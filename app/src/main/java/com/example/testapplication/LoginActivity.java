@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (!task.isSuccessful())
                 {
+                    @SuppressWarnings("ThrowableNotThrown")
                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
 
                     switch (errorCode)

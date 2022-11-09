@@ -72,7 +72,7 @@
             android:imeOptions="actionSend"
             android:inputType="textCapSentences"
             android:maxLines="1"
-            android:padding="10dp"
+            android:padding="14dp"
             android:paddingEnd="35dp"
             android:textColor="@color/colorText"
             android:textColorHint="@color/colorHintGray"

@@ -67,7 +67,7 @@ public class TaskItemActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             list.remove(viewHolder.getBindingAdapterPosition());
-            recyclerViewAdapter.notifyDataSetChanged();
+            recyclerViewAdapter.notifyItemRemoved(viewHolder.getBindingAdapterPosition());
         }
     };
 }

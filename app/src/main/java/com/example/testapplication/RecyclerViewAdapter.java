@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.MyViewHolder> {
 
-    private ArrayList<Task> list;
-    private OnItemListener mOnItemListener;
+    private final ArrayList<Task> list;
+    private final OnItemListener mOnItemListener;
 
     RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
     {
@@ -39,7 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         return list.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView textView;
         OnItemListener onItemListener;

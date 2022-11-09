@@ -1,8 +1,8 @@
 package com.example.testapplication;
 
 public class Task {
-    private String taskName;
-    private String taskId;
+    private final String taskName;
+    private final String taskId;
 
     public Task(String taskName, String taskId)
     {

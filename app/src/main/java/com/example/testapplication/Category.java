@@ -3,6 +3,8 @@ package com.example.testapplication;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class Category implements Parcelable {
     private String categoryName;
     private String categoryId;
@@ -56,6 +58,7 @@ public class Category implements Parcelable {
         dest.writeString(categoryId);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return categoryName;

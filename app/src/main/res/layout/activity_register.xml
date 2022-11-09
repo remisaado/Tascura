@@ -29,7 +29,6 @@
         android:textColorHint="@color/colorHintGray"
         android:textColor="@android:color/white"
         android:padding="16dp"
-        android:minHeight="50dp"
         android:autofillHints="emailAddress" />
 
     <EditText
@@ -43,7 +42,6 @@
         android:textColor="@android:color/white"
         android:padding="16dp"
         android:inputType="textPassword"
-        android:minHeight="50dp"
         android:importantForAutofill="no" />
 
     <Button

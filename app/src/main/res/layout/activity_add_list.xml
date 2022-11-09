@@ -49,7 +49,7 @@
             android:inputType="textCapWords"
             android:hint="@string/enter_name_of_new_list"
             android:background="@drawable/edit_text_shape"
-            android:padding="10dp"
+            android:padding="14dp"
             android:paddingEnd="35dp"
             android:imeOptions="actionSend"
             android:layout_centerVertical="true"

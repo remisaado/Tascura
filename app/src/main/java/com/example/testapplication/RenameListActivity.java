@@ -59,29 +59,32 @@ public class RenameListActivity extends AppCompatActivity {
 
     private void onRenameListClick()
     {
-        String userId = mAuth.getCurrentUser().getUid();
-
-        String categoryId = categories.get(spinnerPosition).getCategoryId();
-
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId).child(categoryId);
-
-        final String text = listEditText.getText().toString();
-
-        HashMap newValue = new HashMap();
-        newValue.put(categoryId, text);
-
-        if (text.trim().length() > 0)
+        if (mAuth.getCurrentUser() != null)
         {
-            categories.get(spinnerPosition).setCategoryName(text);
-            databaseReference.updateChildren(newValue);
+            String userId = mAuth.getCurrentUser().getUid();
 
-            Toast.makeText(this, "List name updated", Toast.LENGTH_SHORT).show();
+            String categoryId = categories.get(spinnerPosition).getCategoryId();
 
-            finish();
-        } else
-        {
-            Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId).child(categoryId);
+
+            final String text = listEditText.getText().toString();
+
+            HashMap<String, Object> newValue = new HashMap<>();
+            newValue.put(categoryId, text);
+
+            if (text.trim().length() > 0)
+            {
+                categories.get(spinnerPosition).setCategoryName(text);
+                databaseReference.updateChildren(newValue);
+
+                Toast.makeText(this, "List name updated", Toast.LENGTH_SHORT).show();
+
+                finish();
+            }
+            else
+            {
+                Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+            }
         }
-
     }
 }
