@@ -80,7 +80,7 @@ public class RenameListActivity extends AppCompatActivity {
             }
             else
             {
-                listEditText.setError("You did not enter any text");
+                listEditText.setError(getString(R.string.error_no_text_entered));
                 listEditText.requestFocus();
             }
         }

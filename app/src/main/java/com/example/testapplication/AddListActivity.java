@@ -69,7 +69,7 @@ public class AddListActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists())
                     {
-                        listEditText.setError("This list already exists");
+                        listEditText.setError(getString(R.string.error_list_already_exists));
                         listEditText.requestFocus();
                     }
                     else
@@ -97,7 +97,7 @@ public class AddListActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            listEditText.setError("You did not enter any text");
+                            listEditText.setError(getString(R.string.error_no_text_entered));
                             listEditText.requestFocus();
                         }
                     }

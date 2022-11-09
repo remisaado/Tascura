@@ -11,8 +11,22 @@
     <string name="register">Register</string>
     <string name="change_list_name">Change list name</string>
 
+    <string name="default_list_name">My List</string>
+
     <string name="menu_add_list">Add List</string>
     <string name="menu_rename_list">Rename List</string>
     <string name="menu_delete_list">Delete List</string>
     <string name="menu_log_out">Log Out</string>
+
+    <string name="toast_no_list_chosen">No list chosen</string>
+    <string name="toast_cannot_delete_default_list">You cannot delete default list</string>
+    <string name="toast_user_registered_successfully">User registered successfully</string>
+
+    <string name="dialog_delete_title">Delete this list?</string>
+    <string name="dialog_delete_message">All tasks in this list will be deleted</string>
+    <string name="dialog_delete_positive_button">Delete</string>
+    <string name="dialog_delete_negative_button">Cancel</string>
+
+    <string name="error_no_text_entered">You did not enter any text</string>
+    <string name="error_list_already_exists">This list already exists</string>
 </resources>
