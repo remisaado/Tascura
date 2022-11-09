@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -77,13 +76,12 @@ public class RenameListActivity extends AppCompatActivity {
                 categories.get(spinnerPosition).setCategoryName(text);
                 databaseReference.updateChildren(newValue);
 
-                Toast.makeText(this, "List name updated", Toast.LENGTH_SHORT).show();
-
                 finish();
             }
             else
             {
-                Toast.makeText(this, "You did not enter any text", Toast.LENGTH_SHORT).show();
+                listEditText.setError("You did not enter any text");
+                listEditText.requestFocus();
             }
         }
     }
