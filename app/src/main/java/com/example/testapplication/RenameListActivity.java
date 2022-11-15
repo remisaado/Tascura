@@ -64,7 +64,7 @@ public class RenameListActivity extends AppCompatActivity {
 
             String categoryId = categories.get(spinnerPosition).getCategoryId();
 
-            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId).child(categoryId);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId).child(categoryId);
 
             final String text = listEditText.getText().toString();
 

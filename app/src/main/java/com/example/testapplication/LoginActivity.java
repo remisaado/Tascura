@@ -84,9 +84,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        finishAffinity();
     }
 }

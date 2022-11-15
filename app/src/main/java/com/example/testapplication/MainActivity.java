@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
-            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
 
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -434,4 +434,5 @@ public class MainActivity extends AppCompatActivity
         sharedPrefsEditor.putInt(SPINNER_CHOICE, spinnerChoice);
         sharedPrefsEditor.apply();
     }
+
 }
