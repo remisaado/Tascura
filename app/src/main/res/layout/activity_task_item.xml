@@ -35,10 +35,75 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp">
+
+            <EditText
+                android:id="@+id/informationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="1"
+                android:inputType="textMultiLine"
+                android:hint="Add information"
+                android:background="@drawable/edit_text_shape"
+                android:padding="14dp"
+                android:paddingStart="30dp"
+                android:imeOptions="actionSend"
+                android:layout_centerVertical="true"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorHintGray"
+                tools:ignore="RtlSymmetry"
+                android:importantForAutofill="no"/>
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_add_24dp"
+                android:layout_alignParentStart="true"
+                android:layout_margin="5dp"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp">
+
+            <EditText
+                android:id="@+id/subTaskEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"
+                android:hint="Add subtask"
+                android:background="@drawable/edit_text_shape"
+                android:padding="14dp"
+                android:paddingStart="30dp"
+                android:imeOptions="actionSend"
+                android:layout_centerVertical="true"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorHintGray"
+                tools:ignore="RtlSymmetry"
+                android:importantForAutofill="no"/>
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_add_24dp"
+                android:layout_alignParentStart="true"
+                android:layout_margin="5dp"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:paddingHorizontal="30dp"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

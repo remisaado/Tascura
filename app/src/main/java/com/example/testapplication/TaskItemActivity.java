@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,8 @@ public class TaskItemActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     SubTasksRecyclerViewAdapter subTasksRecyclerViewAdapter;
+    EditText informationEditText;
+    EditText subTaskEditText;
 
     ArrayList<String> list = new ArrayList<>();
 
@@ -30,6 +33,8 @@ public class TaskItemActivity extends AppCompatActivity {
         RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
         recyclerView = findViewById(R.id.recyclerView);
         TextView superTaskTextView = findViewById(R.id.superTaskTextView);
+        informationEditText = findViewById(R.id.informationEditText);
+        subTaskEditText = findViewById(R.id.subTaskEditText);
 
         Intent intent = getIntent();
         String superTask = intent.getStringExtra(MainActivity.KEY_NAME);
