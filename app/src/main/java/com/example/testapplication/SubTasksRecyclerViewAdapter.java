@@ -1,9 +1,11 @@
 package com.example.testapplication;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +24,15 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
     @NonNull
     @Override
     public SubTasksRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView textView = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
+        EditText editText = (EditText) LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_task_single_view, parent, false);
 
-        return new MyViewHolder(textView);
+        return new MyViewHolder(editText, new CustomEditTextListener());
     }
 
     @Override
     public void onBindViewHolder(@NonNull SubTasksRecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.textView.setText(list.get(position));
+        holder.editText.setText(list.get(position));
+        holder.customEditTextListener.updatePosition(position);
     }
 
     @Override
@@ -39,12 +42,40 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
     public static class MyViewHolder extends RecyclerView.ViewHolder
     {
-        TextView textView;
+        EditText editText;
+        CustomEditTextListener customEditTextListener;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, CustomEditTextListener customEditTextListener) {
             super(itemView);
 
-            textView = itemView.findViewById(R.id.singleView);
+            editText = itemView.findViewById(R.id.subTaskSingleView);
+            this.customEditTextListener = customEditTextListener;
+            editText.addTextChangedListener(customEditTextListener);
+        }
+    }
+
+    private class CustomEditTextListener implements TextWatcher {
+
+        private int position;
+
+        public void updatePosition(int position)
+        {
+            this.position = position;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            list.set(position, charSequence.toString());
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
         }
     }
 }
