@@ -18,7 +18,7 @@ public class TaskItemActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    RecyclerViewAdapter recyclerViewAdapter;
+    SubTasksRecyclerViewAdapter subTasksRecyclerViewAdapter;
 
     ArrayList<String> list = new ArrayList<>();
 
@@ -36,12 +36,7 @@ public class TaskItemActivity extends AppCompatActivity {
         superTaskTextView.setText(superTask);
 
         initRecyclerView();
-        /*
-        for (int i = 1; i < 16; i++)
-        {
-            list.add("Subtask " + i);
-        }
-        */
+
         relativeLayout.setOnClickListener(v -> finish());
     }
 
@@ -49,8 +44,8 @@ public class TaskItemActivity extends AppCompatActivity {
     {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        //recyclerViewAdapter = new RecyclerViewAdapter(list);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        subTasksRecyclerViewAdapter = new SubTasksRecyclerViewAdapter(list);
+        recyclerView.setAdapter(subTasksRecyclerViewAdapter);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
@@ -67,7 +62,7 @@ public class TaskItemActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             list.remove(viewHolder.getBindingAdapterPosition());
-            recyclerViewAdapter.notifyItemRemoved(viewHolder.getBindingAdapterPosition());
+            subTasksRecyclerViewAdapter.notifyItemRemoved(viewHolder.getBindingAdapterPosition());
         }
     };
 }
