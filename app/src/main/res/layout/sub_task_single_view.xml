@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/subTaskSingleView"
+    android:text=""
+    android:inputType="text"
+    android:padding="8dp"
+    android:textSize="16sp"
+    android:textColor="@color/colorHintGray"
+    android:background="@null"
+    android:imeOptions="actionDone">
+
+</EditText>
