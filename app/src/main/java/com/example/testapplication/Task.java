@@ -32,6 +32,16 @@ public class Task {
         return taskId;
     }
 
+    public String getTaskNotes()
+    {
+        return taskNotes;
+    }
+
+    public ArrayList<String> getSubTasksList()
+    {
+        return subTasksList;
+    }
+
     public static class TaskBuilder {
         private String taskName;
         private String taskId;
