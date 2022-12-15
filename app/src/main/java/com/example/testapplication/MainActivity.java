@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
             int spinnerPosition = spinner.getSelectedItemPosition();
             String categoryId = categories.get(spinnerPosition).getCategoryId();
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
             int spinnerPosition = spinner.getSelectedItemPosition();
             String categoryId = categories.get(spinnerPosition).getCategoryId();
@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
             String text = taskEditText.getText().toString();
 
@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity
             if (mAuth.getCurrentUser() != null)
             {
                 String userId = mAuth.getCurrentUser().getUid();
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
                 String categoryId = categories.get(spinner.getSelectedItemPosition()).getCategoryId();
 
                 String taskId = list.get(viewHolder.getBindingAdapterPosition()).getTaskId();
@@ -382,9 +382,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(int position)
     {
-        String taskName = list.get(position).getTaskName();
+        String categoryId = categories.get(spinner.getSelectedItemPosition()).getCategoryId();
+        Task task = list.get(position);
         Intent intent = new Intent(this, TaskItemActivity.class);
-        intent.putExtra(KEY_NAME, taskName);
+        intent.putExtra(KEY_NAME, task);
+        intent.putExtra(KEY_NAME_TWO, categoryId);
         startActivity(intent);
     }
 
@@ -396,7 +398,7 @@ public class MainActivity extends AppCompatActivity
             String userId = mAuth.getCurrentUser().getUid();
 
             String categoryId = categories.get(spinner.getSelectedItemPosition()).getCategoryId();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId).child(categoryId).child("Tasks");
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId).child(categoryId).child("Tasks");
 
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -408,14 +410,25 @@ public class MainActivity extends AppCompatActivity
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     {
-                        Object value = snapshot.child("taskName").getValue();
+                        Object value = snapshot.getValue();
+                        Object nameValue = snapshot.child("taskName").getValue();
+                        Object notesValue = snapshot.child("taskNotes").getValue();
+
+                        ArrayList<String> subTasks = new ArrayList<>();
+
+                        for (DataSnapshot subTask : snapshot.child("SubTasksList").getChildren())
+                        {
+                            subTasks.add(subTask.getValue().toString());
+                        }
+
                         if (value != null)
                         {
+                            System.out.println(subTasks);
                             Task newTask = new Task.TaskBuilder()
-                                    .taskName(value.toString())
+                                    .taskName(nameValue.toString())
                                     .taskId(snapshot.getKey())
-                                    .taskNotes("")
-                                    .subTasksList(new ArrayList<>())
+                                    .taskNotes(notesValue.toString())
+                                    .subTasksList(subTasks)
                                     .build();
 
                             list.add(newTask);

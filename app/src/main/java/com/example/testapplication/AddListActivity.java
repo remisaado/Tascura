@@ -60,7 +60,7 @@ public class AddListActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(userId);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
             final String text = listEditText.getText().toString();
 
             databaseReference.orderByValue().equalTo(text).addListenerForSingleValueEvent(new ValueEventListener() {
