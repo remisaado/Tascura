@@ -6,7 +6,8 @@
     tools:context=".TaskItemActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@drawable/gradient_background"
+    android:paddingHorizontal="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,8 +22,8 @@
             <View
                 android:id="@+id/lineView"
                 android:layout_width="30dp"
-                android:layout_height="0.5dp"
-                android:background="@drawable/divider_line"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_arrow_back_24dp"
                 android:layout_centerVertical="true"/>
 
             <TextView
@@ -31,14 +32,15 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:layout_toEndOf="@id/lineView"
-                android:layout_margin="8dp"/>
+                android:layout_margin="16dp"/>
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp">
+            android:paddingHorizontal="10dp"
+            android:layout_marginVertical="10dp">
 
             <EditText
                 android:id="@+id/informationEditText"
@@ -48,8 +50,8 @@
                 android:inputType="textMultiLine"
                 android:hint="Add information"
                 android:background="@drawable/edit_text_shape"
-                android:padding="14dp"
-                android:paddingStart="30dp"
+                android:padding="12dp"
+                android:paddingStart="32dp"
                 android:imeOptions="actionSend"
                 android:layout_centerVertical="true"
                 android:textColor="@color/colorText"
@@ -60,7 +62,7 @@
             <View
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/ic_add_24dp"
+                android:background="@drawable/ic_notes_24dp"
                 android:layout_alignParentStart="true"
                 android:layout_margin="5dp"
                 android:layout_centerVertical="true"/>
@@ -70,7 +72,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp">
+            android:paddingHorizontal="10dp">
 
             <EditText
                 android:id="@+id/subTaskEditText"
@@ -80,8 +82,8 @@
                 android:inputType="text"
                 android:hint="Add subtask"
                 android:background="@drawable/edit_text_shape"
-                android:padding="14dp"
-                android:paddingStart="30dp"
+                android:padding="12dp"
+                android:paddingStart="32dp"
                 android:imeOptions="actionSend"
                 android:layout_centerVertical="true"
                 android:textColor="@color/colorText"
@@ -103,7 +105,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="30dp"/>
+            android:paddingHorizontal="12dp"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
