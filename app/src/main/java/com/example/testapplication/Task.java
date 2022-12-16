@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class Task implements Parcelable {
     private final String taskName;
     private final String taskId;
-    private final String taskNotes;
+    private final String taskInformation;
     private final ArrayList<String> subTasksList;
 
-    Task(String taskName, String taskId, String taskNotes, ArrayList<String> subTasksList)
+    Task(String taskName, String taskId, String taskInformation, ArrayList<String> subTasksList)
     {
         this.taskName = taskName;
         this.taskId = taskId;
-        this.taskNotes = taskNotes;
+        this.taskInformation = taskInformation;
         this.subTasksList = subTasksList;
     }
 
@@ -29,9 +29,9 @@ public class Task implements Parcelable {
         return taskId;
     }
 
-    public String getTaskNotes()
+    public String getTaskInformation()
     {
-        return taskNotes;
+        return taskInformation;
     }
 
     public ArrayList<String> getSubTasksList()
@@ -43,7 +43,7 @@ public class Task implements Parcelable {
     {
         taskName = in.readString();
         taskId = in.readString();
-        taskNotes = in.readString();
+        taskInformation = in.readString();
         subTasksList = in.createStringArrayList();
     }
 
@@ -73,14 +73,14 @@ public class Task implements Parcelable {
     {
         parcel.writeString(taskName);
         parcel.writeString(taskId);
-        parcel.writeString(taskNotes);
+        parcel.writeString(taskInformation);
         parcel.writeStringList(subTasksList);
     }
 
     public static class TaskBuilder {
         private String taskName;
         private String taskId;
-        private String taskNotes;
+        private String taskInformation;
         private ArrayList<String> subTasksList;
 
         public TaskBuilder taskName(String taskName)
@@ -95,9 +95,9 @@ public class Task implements Parcelable {
             return this;
         }
 
-        public TaskBuilder taskNotes(String taskNotes)
+        public TaskBuilder taskInformation(String taskInformation)
         {
-            this.taskNotes = taskNotes;
+            this.taskInformation = taskInformation;
             return this;
         }
 
@@ -109,7 +109,7 @@ public class Task implements Parcelable {
 
         public Task build()
         {
-            return new Task(taskName, taskId, taskNotes, subTasksList);
+            return new Task(taskName, taskId, taskInformation, subTasksList);
         }
 
     }

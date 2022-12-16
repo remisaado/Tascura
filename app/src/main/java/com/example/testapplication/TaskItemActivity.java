@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -50,7 +51,7 @@ public class TaskItemActivity extends AppCompatActivity {
         categoryId = intent.getStringExtra(MainActivity.KEY_NAME_TWO);
 
         superTaskTextView.setText(superTask.getTaskName());
-        informationEditText.setText(superTask.getTaskNotes());
+        informationEditText.setText(superTask.getTaskInformation());
         list.addAll(superTask.getSubTasksList());
         taskId = superTask.getTaskId();
 
@@ -59,6 +60,8 @@ public class TaskItemActivity extends AppCompatActivity {
         relativeLayout.setOnClickListener(v -> finish());
 
         subTaskEditText.setOnEditorActionListener(editorActionListener);
+        informationEditText.setOnEditorActionListener(editorActionListener);
+        informationEditText.setOnFocusChangeListener(onFocusChangeListener);
     }
 
     private void initRecyclerView()
@@ -76,9 +79,23 @@ public class TaskItemActivity extends AppCompatActivity {
 
     private final TextView.OnEditorActionListener editorActionListener = (textView, i, keyEvent) -> {
 
-        onAddSubTaskClick();
+        if (subTaskEditText.equals(textView))
+        {
+            onAddSubTaskClick();
+        }
+        else if (informationEditText.equals(textView))
+        {
+            onAddInformationClick();
+        }
 
         return true;
+    };
+
+    private final View.OnFocusChangeListener onFocusChangeListener = (view, hasFocus) -> {
+        if (!hasFocus)
+        {
+            onAddInformationClick();
+        }
     };
 
     private void onAddSubTaskClick()
@@ -104,6 +121,20 @@ public class TaskItemActivity extends AppCompatActivity {
         }
     }
 
+    private void onAddInformationClick()
+    {
+        if (mAuth.getCurrentUser() != null)
+        {
+            String userId = mAuth.getCurrentUser().getUid();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users")
+                    .child(userId).child(categoryId).child("Tasks").child(taskId);
+
+            String text = informationEditText.getText().toString();
+
+            databaseReference.child("taskInformation").setValue(text);
+        }
+    }
+
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -116,4 +147,11 @@ public class TaskItemActivity extends AppCompatActivity {
             subTasksRecyclerViewAdapter.notifyItemRemoved(viewHolder.getBindingAdapterPosition());
         }
     };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        onAddInformationClick();
+    }
 }
