@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,8 +54,9 @@ public class MainActivity extends AppCompatActivity
     ProgressBar progressBar;
     FirebaseAuth mAuth;
 
-    public static final String KEY_NAME = "com.example.testapplication.KEY";
-    public static final String KEY_NAME_TWO = "com.example.testapplication.KEYTWO";
+    public static final String KEY_NAME = "com.example.TestApplication.KEY";
+    public static final String KEY_NAME_TWO = "com.example.TestApplication.KEY-TWO";
+    public static final String KEY_NAME_THREE = "com.example.TestApplication.KEY-THREE";
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String SPINNER_CHOICE = "spinnerChoice";
 
@@ -384,9 +386,11 @@ public class MainActivity extends AppCompatActivity
     {
         String categoryId = categories.get(spinner.getSelectedItemPosition()).getCategoryId();
         Task task = list.get(position);
+        ArrayList<SubTask> subTasks = list.get(position).getSubTasksList();
         Intent intent = new Intent(this, TaskItemActivity.class);
         intent.putExtra(KEY_NAME, task);
         intent.putExtra(KEY_NAME_TWO, categoryId);
+        intent.putParcelableArrayListExtra(KEY_NAME_THREE, subTasks);
         startActivity(intent);
     }
 
@@ -414,16 +418,22 @@ public class MainActivity extends AppCompatActivity
                         Object nameValue = snapshot.child("taskName").getValue();
                         Object informationValue = snapshot.child("taskInformation").getValue();
 
-                        ArrayList<String> subTasks = new ArrayList<>();
+                        ArrayList<SubTask> subTasks = new ArrayList<>();
 
                         for (DataSnapshot subTask : snapshot.child("SubTasksList").getChildren())
                         {
-                            subTasks.add(subTask.getValue().toString());
+                            String subValue = subTask.getValue().toString();
+                            String subKey = subTask.getKey();
+                            SubTask newSubTask = new SubTask.SubTaskBuilder()
+                                    .subTaskName(subValue)
+                                    .subTaskId(subKey)
+                                    .build();
+
+                            subTasks.add(newSubTask);
                         }
 
                         if (value != null)
                         {
-                            System.out.println(subTasks);
                             Task newTask = new Task.TaskBuilder()
                                     .taskName(nameValue.toString())
                                     .taskId(snapshot.getKey())

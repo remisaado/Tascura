@@ -9,9 +9,9 @@ public class Task implements Parcelable {
     private final String taskName;
     private final String taskId;
     private final String taskInformation;
-    private final ArrayList<String> subTasksList;
+    private final ArrayList<SubTask> subTasksList;
 
-    Task(String taskName, String taskId, String taskInformation, ArrayList<String> subTasksList)
+    Task(String taskName, String taskId, String taskInformation, ArrayList<SubTask> subTasksList)
     {
         this.taskName = taskName;
         this.taskId = taskId;
@@ -34,25 +34,41 @@ public class Task implements Parcelable {
         return taskInformation;
     }
 
-    public ArrayList<String> getSubTasksList()
+    public ArrayList<SubTask> getSubTasksList()
     {
         return subTasksList;
     }
+
+    public static ArrayList<SubTask> readSubTaskList(Parcel in) {
+        int size = in.readInt();
+        if (size < 0) {
+            return null;
+        }
+        ArrayList<SubTask> subTasks = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            subTasks.add((SubTask) in.readParcelable(SubTask.class.getClassLoader()));
+        }
+        return subTasks;
+    }
+
 
     protected Task(Parcel in)
     {
         taskName = in.readString();
         taskId = in.readString();
         taskInformation = in.readString();
-        subTasksList = in.createStringArrayList();
+        subTasksList = readSubTaskList(in);
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>()
     {
         @Override
-        public Task createFromParcel(Parcel in)
-        {
-            return new Task(in);
+        public Task createFromParcel(Parcel in) {
+            String taskName = in.readString();
+            String taskId = in.readString();
+            String taskInformation = in.readString();
+            ArrayList<SubTask> subTasksList = readSubTaskList(in);
+            return new Task(taskName, taskId, taskInformation, subTasksList);
         }
 
         @Override
@@ -74,14 +90,14 @@ public class Task implements Parcelable {
         parcel.writeString(taskName);
         parcel.writeString(taskId);
         parcel.writeString(taskInformation);
-        parcel.writeStringList(subTasksList);
+        parcel.writeList(subTasksList);
     }
 
     public static class TaskBuilder {
         private String taskName;
         private String taskId;
         private String taskInformation;
-        private ArrayList<String> subTasksList;
+        private ArrayList<SubTask> subTasksList;
 
         public TaskBuilder taskName(String taskName)
         {
@@ -101,7 +117,7 @@ public class Task implements Parcelable {
             return this;
         }
 
-        public TaskBuilder subTasksList(ArrayList<String> subTasksList)
+        public TaskBuilder subTasksList(ArrayList<SubTask> subTasksList)
         {
             this.subTasksList = subTasksList;
             return this;
