@@ -39,25 +39,12 @@ public class Task implements Parcelable {
         return subTasksList;
     }
 
-    public static ArrayList<SubTask> readSubTaskList(Parcel in) {
-        int size = in.readInt();
-        if (size < 0) {
-            return null;
-        }
-        ArrayList<SubTask> subTasks = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            subTasks.add((SubTask) in.readParcelable(SubTask.class.getClassLoader()));
-        }
-        return subTasks;
-    }
-
-
     protected Task(Parcel in)
     {
         taskName = in.readString();
         taskId = in.readString();
         taskInformation = in.readString();
-        subTasksList = readSubTaskList(in);
+        subTasksList = in.createTypedArrayList(SubTask.CREATOR);
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>()
@@ -67,7 +54,7 @@ public class Task implements Parcelable {
             String taskName = in.readString();
             String taskId = in.readString();
             String taskInformation = in.readString();
-            ArrayList<SubTask> subTasksList = readSubTaskList(in);
+            ArrayList<SubTask> subTasksList = in.createTypedArrayList(SubTask.CREATOR);
             return new Task(taskName, taskId, taskInformation, subTasksList);
         }
 
@@ -90,7 +77,7 @@ public class Task implements Parcelable {
         parcel.writeString(taskName);
         parcel.writeString(taskId);
         parcel.writeString(taskInformation);
-        parcel.writeList(subTasksList);
+        parcel.writeTypedList(subTasksList);
     }
 
     public static class TaskBuilder {

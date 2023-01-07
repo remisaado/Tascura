@@ -39,7 +39,9 @@ public class SubTask implements Parcelable {
         @Override
         public SubTask createFromParcel(Parcel in)
         {
-            return new SubTask(in);
+            String subTaskName = in.readString();
+            String subTaskId = in.readString();
+            return new SubTask(subTaskName, subTaskId);
         }
 
         @Override

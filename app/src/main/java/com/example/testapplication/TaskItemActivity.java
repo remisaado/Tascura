@@ -2,12 +2,14 @@ package com.example.testapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class TaskItemActivity extends AppCompatActivity {
 
@@ -51,6 +55,7 @@ public class TaskItemActivity extends AppCompatActivity {
         superTask = intent.getParcelableExtra(MainActivity.KEY_NAME);
         categoryId = intent.getStringExtra(MainActivity.KEY_NAME_TWO);
         list.addAll(intent.getParcelableArrayListExtra(MainActivity.KEY_NAME_THREE));
+//        list.addAll(superTask.getSubTasksList());
 
         superTaskTextView.setText(superTask.getTaskName());
         informationEditText.setText(superTask.getTaskInformation());
@@ -149,8 +154,32 @@ public class TaskItemActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            list.remove(viewHolder.getBindingAdapterPosition());
-            subTasksRecyclerViewAdapter.notifyItemRemoved(viewHolder.getBindingAdapterPosition());
+            if (mAuth.getCurrentUser() != null)
+            {
+                String userId = mAuth.getCurrentUser().getUid();
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users")
+                        .child(userId).child(categoryId).child("Tasks").child(taskId).child("SubTasksList");
+
+                String subTaskId = list.get(viewHolder.getBindingAdapterPosition()).getSubTaskId();
+
+                list.remove(viewHolder.getBindingAdapterPosition());
+
+                databaseReference.child(subTaskId).removeValue();
+
+                subTasksRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(TaskItemActivity.this, R.color.colorRed))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete_24dp)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
 

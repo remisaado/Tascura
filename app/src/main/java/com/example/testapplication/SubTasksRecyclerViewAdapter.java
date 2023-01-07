@@ -40,10 +40,10 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
     @Override
     public void onBindViewHolder(@NonNull SubTasksRecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.editText.setText(list.get(position).getSubTaskName());
-        String currentText = holder.editText.getText().toString();
-        holder.customEditTextListener.updateCurrentText(currentText);
         holder.customEditTextListener.updatePosition(position);
+        String currentText = list.get(position).getSubTaskName();
+        holder.customEditTextListener.updateCurrentText(currentText);
+        holder.editText.setText(currentText);
     }
 
     @Override
@@ -96,7 +96,6 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             String text = charSequence.toString();
             String taskId = task.getTaskId();
-            String subTaskId = list.get(position).getSubTaskId();
 
             if (mAuth.getCurrentUser() != null)
             {
@@ -104,8 +103,10 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users")
                         .child(userId).child(categoryId).child("Tasks").child(taskId).child("SubTasksList");
 
-                if (currentText != null && !currentText.isEmpty())
+                if (currentText != null)
                 {
+                    String subTaskId = list.get(position).getSubTaskId();
+
                     list.get(position).setSubTaskName(text);
                     databaseReference.child(subTaskId).setValue(text);
                 }
