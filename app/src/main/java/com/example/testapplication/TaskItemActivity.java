@@ -54,8 +54,7 @@ public class TaskItemActivity extends AppCompatActivity {
         Intent intent = getIntent();
         superTask = intent.getParcelableExtra(MainActivity.KEY_NAME);
         categoryId = intent.getStringExtra(MainActivity.KEY_NAME_TWO);
-        list.addAll(intent.getParcelableArrayListExtra(MainActivity.KEY_NAME_THREE));
-//        list.addAll(superTask.getSubTasksList());
+        list.addAll(superTask.getSubTasksList());
 
         superTaskTextView.setText(superTask.getTaskName());
         informationEditText.setText(superTask.getTaskInformation());
