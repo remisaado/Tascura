@@ -28,12 +28,6 @@ public class SubTask implements Parcelable {
         this.subTaskName = subTaskName;
     }
 
-    protected SubTask(Parcel in)
-    {
-        subTaskName = in.readString();
-        subTaskId = in.readString();
-    }
-
     public static final Creator<SubTask> CREATOR = new Creator<SubTask>()
     {
         @Override
