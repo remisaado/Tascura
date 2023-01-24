@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     public static final String KEY_NAME_TWO = "com.example.TestApplication.KEY-TWO";
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String SPINNER_CHOICE = "spinnerChoice";
+    public static final String CATEGORY_ID_CHOICE = "categoryIdChoice";
 
     ArrayList<Task> list = new ArrayList<>();
     ArrayList<Category> categories = new ArrayList<>();
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-//        initRecyclerView();
+        initRecyclerView();
 
         taskEditText.setOnEditorActionListener(editorActionListener);
 
@@ -186,7 +187,6 @@ public class MainActivity extends AppCompatActivity
                             }
                         }
                         loadData();
-                        initRecyclerView();
                     }
                 }
 
@@ -211,12 +211,9 @@ public class MainActivity extends AppCompatActivity
 
     private void initRecyclerView()
     {
-        int spinnerPosition = spinner.getSelectedItemPosition();
-        String categoryId = categories.get(spinnerPosition).getCategoryId();
-
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerViewAdapter = new RecyclerViewAdapter(list, this, categoryId);
+        recyclerViewAdapter = new RecyclerViewAdapter(list, this);
         recyclerView.setAdapter(recyclerViewAdapter);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
@@ -461,6 +458,10 @@ public class MainActivity extends AppCompatActivity
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+            SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
+            SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+            sharedPrefsEditor.putString(CATEGORY_ID_CHOICE, categoryId);
+            sharedPrefsEditor.apply();
         }
     }
 

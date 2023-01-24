@@ -1,5 +1,7 @@
 package com.example.testapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +22,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     private final ArrayList<Task> list;
     private final OnItemListener mOnItemListener;
-    private final String categoryId;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener, String categoryId)
+    RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
     {
         this.list = list;
         this.mOnItemListener = onItemListener;
-        this.categoryId = categoryId;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        TextView textView = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
 
         return new MyViewHolder(view, mOnItemListener);
@@ -58,6 +56,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         checkmarkBoxView.setOnClickListener(v -> {
             if (mAuth.getCurrentUser() != null)
             {
+                Context mContext = holder.textView.getContext();
+                SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+                String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
+
                 Task task = list.get(position);
 
                 String userId = mAuth.getCurrentUser().getUid();
@@ -94,18 +96,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView textView;
-//        ImageView checkmarkBoxView;
         OnItemListener onItemListener;
 
         MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.singleView);
-//            checkmarkBoxView = itemView.findViewById(R.id.checkmark_box);
             this.onItemListener = onItemListener;
 
             itemView.setOnClickListener(this);
-//            checkmarkBoxView.setOnClickListener(this);
         }
 
         @Override
