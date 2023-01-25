@@ -7,6 +7,7 @@
     <color name="colorText">#FFFFFF</color>
 
     <color name="colorHintGray">#B9B9B9</color>
+    <color name="colorStrikeThroughGray">#969696</color>
     <color name="colorPrimaryTransparent">#2606798D</color>
     <color name="colorPrimaryDarkTransparent">#2600001A</color>
     <color name="colorAccentTransparent">#2607404B</color>

@@ -2,6 +2,8 @@ package com.example.testapplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,21 +44,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.textView.setText(list.get(position).getTaskName());
 
+        Context mContext = holder.textView.getContext();
+
         ImageView checkmarkBoxView = holder.itemView.findViewById(R.id.checkmark_box);
 
         if (list.get(position).getIsChecked())
         {
             checkmarkBoxView.setImageResource(R.drawable.ic_checked_box_36dp);
+            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.textView.setTextColor(mContext.getResources().getColor(R.color.colorStrikeThroughGray));
         }
         else
         {
             checkmarkBoxView.setImageResource(R.drawable.ic_unchecked_box_36dp);
+            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            holder.textView.setTextColor(mContext.getResources().getColor(R.color.colorText));
         }
 
         checkmarkBoxView.setOnClickListener(v -> {
             if (mAuth.getCurrentUser() != null)
             {
-                Context mContext = holder.textView.getContext();
                 SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
                 String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
@@ -79,6 +86,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
                         .subTasksList(task.getSubTasksList())
                         .isChecked(!task.getIsChecked())
                         .build();
+
+//                if (task.getIsChecked())
+//                {
+//                    list.remove(position);
+//                    list.add(task);
+//                    notifyItemMoved(position, list.size() - 1);
+//                }
+//                else
+//                {
+//                    list.set(position, task);
+//
+//                    notifyItemChanged(position);
+//                }
 
                 list.set(position, task);
 
