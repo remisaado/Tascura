@@ -3,7 +3,6 @@ package com.example.testapplication;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +21,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     private final ArrayList<Task> list;
     private final OnItemListener mOnItemListener;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
     {
@@ -62,49 +59,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         }
 
         checkmarkBoxView.setOnClickListener(v -> {
-            if (mAuth.getCurrentUser() != null)
-            {
-                SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
-                String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
+            SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+            String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
-                Task task = list.get(position);
+            Task task = list.get(position);
 
-                String userId = mAuth.getCurrentUser().getUid();
-                String taskId = task.getTaskId();
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users")
-                        .child(userId).child(categoryId).child("Tasks").child(taskId);
+            String taskId = task.getTaskId();
 
-                HashMap<String, Object> taskUpdates = new HashMap<>();
-                taskUpdates.put("isChecked", !task.getIsChecked());
+            DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
+                    .child(categoryId).child("Tasks").child(taskId);
 
-                databaseReference.updateChildren(taskUpdates);
+            HashMap<String, Object> taskUpdates = new HashMap<>();
+            taskUpdates.put("isChecked", !task.getIsChecked());
 
-                task = new Task.TaskBuilder()
-                        .taskName(task.getTaskName())
-                        .taskId(task.getTaskId())
-                        .taskInformation(task.getTaskInformation())
-                        .subTasksList(task.getSubTasksList())
-                        .isChecked(!task.getIsChecked())
-                        .build();
+            databaseReference.updateChildren(taskUpdates);
 
-//                if (task.getIsChecked())
-//                {
-//                    list.remove(position);
-//                    list.add(task);
-//                    notifyItemMoved(position, list.size() - 1);
-//                }
-//                else
-//                {
-//                    list.set(position, task);
-//
-//                    notifyItemChanged(position);
-//                }
+            task = new Task.TaskBuilder()
+                    .taskName(task.getTaskName())
+                    .taskId(task.getTaskId())
+                    .taskInformation(task.getTaskInformation())
+                    .subTasksList(task.getSubTasksList())
+                    .isChecked(!task.getIsChecked())
+                    .build();
 
-                list.set(position, task);
+            list.set(position, task);
 
-                notifyItemChanged(position);
-            }
-
+            notifyItemChanged(position);
         });
     }
 

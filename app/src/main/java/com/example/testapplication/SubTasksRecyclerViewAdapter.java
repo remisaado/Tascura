@@ -10,9 +10,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -21,7 +19,7 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
     private final ArrayList<SubTask> list;
     private final Task task;
     private final String categoryId;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     SubTasksRecyclerViewAdapter(ArrayList<SubTask> list, Task task, String categoryId)
     {
@@ -89,32 +87,31 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
         }
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+        {
         }
 
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+        {
             String text = charSequence.toString();
             String taskId = task.getTaskId();
 
-            if (mAuth.getCurrentUser() != null)
+            DatabaseReference databaseReference = firebaseHelper.getDatabaseReference();
+
+            if (currentText != null)
             {
-                String userId = mAuth.getCurrentUser().getUid();
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users")
-                        .child(userId).child(categoryId).child("Tasks").child(taskId).child("SubTasksList");
+                String subTaskId = list.get(position).getSubTaskId();
 
-                if (currentText != null)
-                {
-                    String subTaskId = list.get(position).getSubTaskId();
-
-                    list.get(position).setSubTaskName(text);
-                    databaseReference.child(subTaskId).setValue(text);
-                }
+                list.get(position).setSubTaskName(text);
+                databaseReference.child(categoryId).child("Tasks").child(taskId)
+                        .child("SubTasksList").child(subTaskId).setValue(text);
             }
         }
 
         @Override
-        public void afterTextChanged(Editable editable) {
+        public void afterTextChanged(Editable editable)
+        {
         }
     }
 }

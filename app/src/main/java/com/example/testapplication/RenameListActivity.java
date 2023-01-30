@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +20,7 @@ public class RenameListActivity extends AppCompatActivity {
     View renameListButton;
     View backButton;
     FirebaseAuth mAuth;
+    private FirebaseHelper firebaseHelper;
 
     ArrayList<Category> categories = new ArrayList<>();
     int spinnerPosition;
@@ -35,6 +35,8 @@ public class RenameListActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
 
         mAuth = FirebaseAuth.getInstance();
+
+        firebaseHelper = new FirebaseHelper();
 
         Intent intent = getIntent();
         categories = intent.getParcelableArrayListExtra(MainActivity.KEY_NAME);
@@ -58,31 +60,27 @@ public class RenameListActivity extends AppCompatActivity {
 
     private void onRenameListClick()
     {
-        if (mAuth.getCurrentUser() != null)
+        String categoryId = categories.get(spinnerPosition).getCategoryId();
+
+        DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
+                .child(categoryId);
+
+        final String text = listEditText.getText().toString();
+
+        HashMap<String, Object> newValue = new HashMap<>();
+        newValue.put(categoryId, text);
+
+        if (text.trim().length() > 0)
         {
-            String userId = mAuth.getCurrentUser().getUid();
+            categories.get(spinnerPosition).setCategoryName(text);
+            databaseReference.updateChildren(newValue);
 
-            String categoryId = categories.get(spinnerPosition).getCategoryId();
-
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId).child(categoryId);
-
-            final String text = listEditText.getText().toString();
-
-            HashMap<String, Object> newValue = new HashMap<>();
-            newValue.put(categoryId, text);
-
-            if (text.trim().length() > 0)
-            {
-                categories.get(spinnerPosition).setCategoryName(text);
-                databaseReference.updateChildren(newValue);
-
-                finish();
-            }
-            else
-            {
-                listEditText.setError(getString(R.string.error_no_text_entered));
-                listEditText.requestFocus();
-            }
+            finish();
+        }
+        else
+        {
+            listEditText.setError(getString(R.string.error_no_text_entered));
+            listEditText.requestFocus();
         }
     }
 }
