@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText logInEmailEditText;
@@ -34,9 +36,25 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        buttonDefault();
+
         logInButton.setOnClickListener(view -> logInUser());
 
         registerHereTextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+    }
+
+    void buttonDefault()
+    {
+        logInButton.setText(R.string.log_in);
+        logInButton.setEnabled(true);
+        logInButton.setAlpha(1);
+    }
+
+    void buttonLoading()
+    {
+        logInButton.setText(R.string.logging_in);
+        logInButton.setEnabled(false);
+        logInButton.setAlpha(0.5f);
     }
 
     private void logInUser()
@@ -56,11 +74,14 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
+            buttonLoading();
+
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                buttonDefault();
+
                 if (!task.isSuccessful())
                 {
-                    @SuppressWarnings("ThrowableNotThrown")
-                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                    String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
 
                     switch (errorCode)
                     {

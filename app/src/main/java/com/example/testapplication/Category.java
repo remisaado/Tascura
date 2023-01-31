@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 public class Category implements Parcelable {
     private String categoryName;
-    private String categoryId;
+    private final String categoryId;
 
     public Category(String categoryName, String categoryId)
     {
