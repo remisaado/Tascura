@@ -24,11 +24,13 @@
                 android:id="@+id/spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                android:spinnerMode="dropdown"
-                android:backgroundTint="@android:color/white"
                 android:layout_gravity="center"
-                android:gravity="center"/>
+                android:backgroundTint="@android:color/white"
+                android:gravity="center"
+                android:minHeight="48dp"
+                android:spinnerMode="dropdown"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.appcompat.widget.Toolbar>
 

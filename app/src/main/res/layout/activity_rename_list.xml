@@ -53,8 +53,10 @@
             android:imeOptions="actionSend"
             android:layout_centerVertical="true"
             android:textColor="@color/colorText"
+            android:textColorHint="@color/colorHintGray"
             tools:ignore="RtlSymmetry"
-            android:importantForAutofill="no" />
+            android:importantForAutofill="no"
+            android:hint="@string/new_list_name"/>
 
         <View
             android:id="@+id/renameListButton"

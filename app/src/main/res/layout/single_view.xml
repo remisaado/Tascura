@@ -1,17 +1,19 @@
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:orientation="horizontal">
 
-<ImageView
-    android:id="@+id/checkmark_box"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:src="@drawable/ic_unchecked_box_36dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:layout_marginStart="8dp"/>
+    <ImageView
+        android:id="@+id/checkmark_box"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_unchecked_box_36dp"
+        tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 <TextView
     android:id="@+id/singleView"
