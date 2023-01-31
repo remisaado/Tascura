@@ -104,8 +104,8 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
                 String subTaskId = list.get(position).getSubTaskId();
 
                 list.get(position).setSubTaskName(text);
-                databaseReference.child(categoryId).child("Tasks").child(taskId)
-                        .child("SubTasksList").child(subTaskId).setValue(text);
+                databaseReference.child(categoryId).child(DatabaseNodes.TASKS).child(taskId)
+                        .child(DatabaseNodes.SUB_TASKS_LIST).child(subTaskId).setValue(text);
             }
         }
 

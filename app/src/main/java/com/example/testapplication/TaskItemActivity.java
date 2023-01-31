@@ -108,7 +108,7 @@ public class TaskItemActivity extends AppCompatActivity {
     private void onAddSubTaskClick()
     {
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
-                .child(categoryId).child("Tasks").child(taskId).child("SubTasksList");
+                .child(categoryId).child(DatabaseNodes.TASKS).child(taskId).child(DatabaseNodes.SUB_TASKS_LIST);
 
         String text = subTaskEditText.getText().toString();
 
@@ -132,11 +132,11 @@ public class TaskItemActivity extends AppCompatActivity {
     private void onAddInformationClick()
     {
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
-                .child(categoryId).child("Tasks").child(taskId);
+                .child(categoryId).child(DatabaseNodes.TASKS).child(taskId);
 
         String text = informationEditText.getText().toString();
 
-        databaseReference.child("taskInformation").setValue(text);
+        databaseReference.child(DatabaseNodes.TASK_INFORMATION).setValue(text);
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -148,7 +148,7 @@ public class TaskItemActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
-                    .child(categoryId).child("Tasks").child(taskId).child("SubTasksList");
+                    .child(categoryId).child(DatabaseNodes.TASKS).child(taskId).child(DatabaseNodes.SUB_TASKS_LIST);
 
             String subTaskId = list.get(viewHolder.getBindingAdapterPosition()).getSubTaskId();
 

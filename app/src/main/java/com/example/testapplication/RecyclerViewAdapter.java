@@ -42,50 +42,58 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         holder.textView.setText(list.get(position).getTaskName());
 
         Context mContext = holder.textView.getContext();
-
         ImageView checkmarkBoxView = holder.itemView.findViewById(R.id.checkmark_box);
+        TextView textView = holder.textView;
 
+        checkIfChecked(checkmarkBoxView, textView, mContext, position);
+
+        checkmarkBoxView.setOnClickListener(v -> onCheckMarkClick(mContext, position));
+    }
+
+    void checkIfChecked(ImageView checkmarkBoxView, TextView textView, Context mContext, int position)
+    {
         if (list.get(position).getIsChecked())
         {
             checkmarkBoxView.setImageResource(R.drawable.ic_checked_box_36dp);
-            holder.textView.setPaintFlags(holder.textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.textView.setTextColor(mContext.getResources().getColor(R.color.colorStrikeThroughGray));
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            textView.setTextColor(mContext.getResources().getColor(R.color.colorStrikeThroughGray));
         }
         else
         {
             checkmarkBoxView.setImageResource(R.drawable.ic_unchecked_box_36dp);
-            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            holder.textView.setTextColor(mContext.getResources().getColor(R.color.colorText));
+            textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            textView.setTextColor(mContext.getResources().getColor(R.color.colorText));
         }
+    }
 
-        checkmarkBoxView.setOnClickListener(v -> {
-            SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
-            String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
+    void onCheckMarkClick(Context mContext, int position)
+    {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+        String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
-            Task task = list.get(position);
+        Task task = list.get(position);
 
-            String taskId = task.getTaskId();
+        String taskId = task.getTaskId();
 
-            DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
-                    .child(categoryId).child("Tasks").child(taskId);
+        DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
+                .child(categoryId).child(DatabaseNodes.TASKS).child(taskId);
 
-            HashMap<String, Object> taskUpdates = new HashMap<>();
-            taskUpdates.put("isChecked", !task.getIsChecked());
+        HashMap<String, Object> taskUpdates = new HashMap<>();
+        taskUpdates.put(DatabaseNodes.IS_CHECKED, !task.getIsChecked());
 
-            databaseReference.updateChildren(taskUpdates);
+        databaseReference.updateChildren(taskUpdates);
 
-            task = new Task.TaskBuilder()
-                    .taskName(task.getTaskName())
-                    .taskId(task.getTaskId())
-                    .taskInformation(task.getTaskInformation())
-                    .subTasksList(task.getSubTasksList())
-                    .isChecked(!task.getIsChecked())
-                    .build();
+        task = new Task.TaskBuilder()
+                .taskName(task.getTaskName())
+                .taskId(task.getTaskId())
+                .taskInformation(task.getTaskInformation())
+                .subTasksList(task.getSubTasksList())
+                .isChecked(!task.getIsChecked())
+                .build();
 
-            list.set(position, task);
+        list.set(position, task);
 
-            notifyItemChanged(position);
-        });
+        notifyItemChanged(position);
     }
 
     @Override

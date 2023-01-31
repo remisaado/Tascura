@@ -18,7 +18,7 @@ public class FirebaseHelper {
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
-            return FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            return FirebaseDatabase.getInstance().getReference(DatabaseNodes.USERS).child(userId);
         }
         return null;
     }
