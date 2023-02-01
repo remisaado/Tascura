@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText logInPasswordEditText;
     Button logInButton;
     TextView registerHereTextView;
+    TextView forgotPasswordTextView;
 
     FirebaseAuth mAuth;
 
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         logInPasswordEditText = findViewById(R.id.logInPasswordEditText);
         logInButton = findViewById(R.id.logInButton);
         registerHereTextView = findViewById(R.id.registerHereTextView);
+        forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -41,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         logInButton.setOnClickListener(view -> logInUser());
 
         registerHereTextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+
+        forgotPasswordTextView.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class)));
     }
 
     void buttonDefault()

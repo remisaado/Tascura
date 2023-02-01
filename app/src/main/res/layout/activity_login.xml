@@ -60,4 +60,12 @@
         android:text="@string/register_here"
         android:gravity="center_horizontal"/>
 
+    <TextView
+        android:id="@+id/forgotPasswordTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:text="@string/forgot_password"
+        android:gravity="center_horizontal"/>
+
 </LinearLayout>

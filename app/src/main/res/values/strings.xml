@@ -9,8 +9,12 @@
     <string name="logging_in">Logging In…</string>
     <string name="log_in_here">Already have an account? Log in here!</string>
     <string name="register_here">Don\'t have an account? Register here!</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="to_reset_your_password">To reset your password, please provide the email address registered to the account</string>
     <string name="register">Register</string>
     <string name="registering">Registering…</string>
+    <string name="send_new_password">Send Mail</string>
+    <string name="sending">Sending…</string>
     <string name="change_list_name">Change list name</string>
     <string name="add_subtask">Add subtask</string>
     <string name="add_information">Add information</string>
@@ -26,6 +30,8 @@
     <string name="toast_no_list_chosen">No list chosen</string>
     <string name="toast_cannot_delete_default_list">You cannot delete default list</string>
     <string name="toast_user_registered_successfully">User registered successfully</string>
+    <string name="toast_email_sent_successfully">Success! Check your email to change your password</string>
+    <string name="toast_something_went_wrong">Something went wrong, please try again</string>
 
     <string name="dialog_delete_title">Delete this list?</string>
     <string name="dialog_delete_message">All tasks in this list will be deleted</string>
