@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -193,6 +194,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError)
             {
+                Log.w("Database error", databaseError.toException());
+                Toast.makeText(MainActivity.this, "Operation failed. Please try again later.", Toast.LENGTH_LONG).show();
             }
         });
         spinnerAdapter = new ArrayAdapter<>(this, R.layout.custom_title, android.R.id.text1, categories);
@@ -265,8 +268,10 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 @Override
-                public void onCancelled(@NonNull DatabaseError error)
+                public void onCancelled(@NonNull DatabaseError databaseError)
                 {
+                    Log.w("Database error", databaseError.toException());
+                    Toast.makeText(MainActivity.this, "Operation failed. Please try again later.", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -442,6 +447,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError)
             {
+                Log.w("Database error", databaseError.toException());
+                Toast.makeText(MainActivity.this, "Operation failed. Please try again later.", Toast.LENGTH_LONG).show();
             }
         });
         SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
