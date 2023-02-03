@@ -378,11 +378,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(int position)
     {
-        String categoryId = categories.get(spinner.getSelectedItemPosition()).getCategoryId();
         Task task = list.get(position);
         Intent intent = new Intent(this, TaskItemActivity.class);
         intent.putExtra(KEY_NAME, task);
-        intent.putExtra(KEY_NAME_TWO, categoryId);
         startActivity(intent);
     }
 

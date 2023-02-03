@@ -1,5 +1,6 @@
 package com.example.testapplication;
 
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,14 +19,12 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
     private final ArrayList<SubTask> list;
     private final Task task;
-    private final String categoryId;
     private final FirebaseHelper firebaseHelper = new FirebaseHelper();
 
-    SubTasksRecyclerViewAdapter(ArrayList<SubTask> list, Task task, String categoryId)
+    SubTasksRecyclerViewAdapter(ArrayList<SubTask> list, Task task)
     {
         this.list = list;
         this.task = task;
-        this.categoryId = categoryId;
     }
 
     @NonNull
@@ -33,7 +32,7 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
     public SubTasksRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         EditText editText = (EditText) LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_task_single_view, parent, false);
 
-        return new MyViewHolder(editText, task, categoryId);
+        return new MyViewHolder(editText, task);
     }
 
     @Override
@@ -54,8 +53,11 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
         EditText editText;
         CustomEditTextListener customEditTextListener;
 
-        public MyViewHolder(@NonNull View itemView, Task task, String categoryId) {
+        public MyViewHolder(@NonNull View itemView, Task task) {
             super(itemView);
+
+            SharedPreferences sharedPrefs = itemView.getContext().getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+            String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
             editText = itemView.findViewById(R.id.subTaskSingleView);
             this.customEditTextListener = new CustomEditTextListener(task, categoryId);

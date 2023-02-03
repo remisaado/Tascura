@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
@@ -55,8 +56,10 @@ public class TaskItemActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         superTask = intent.getParcelableExtra(MainActivity.KEY_NAME);
-        categoryId = intent.getStringExtra(MainActivity.KEY_NAME_TWO);
         list.addAll(superTask.getSubTasksList());
+
+        SharedPreferences sharedPrefs = this.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+        categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
         superTaskTextView.setText(superTask.getTaskName());
         informationEditText.setText(superTask.getTaskInformation());
@@ -75,7 +78,7 @@ public class TaskItemActivity extends AppCompatActivity {
     {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        subTasksRecyclerViewAdapter = new SubTasksRecyclerViewAdapter(list, superTask, categoryId);
+        subTasksRecyclerViewAdapter = new SubTasksRecyclerViewAdapter(list, superTask);
         recyclerView.setAdapter(subTasksRecyclerViewAdapter);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
