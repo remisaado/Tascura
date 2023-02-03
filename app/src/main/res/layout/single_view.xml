@@ -12,7 +12,7 @@ android:orientation="horizontal">
         android:layout_marginStart="8dp"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_unchecked_box_36dp"
+        android:src="@drawable/ic_unchecked_circle_36dp"
         tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 <TextView

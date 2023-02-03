@@ -54,13 +54,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     {
         if (list.get(position).getIsChecked())
         {
-            checkmarkBoxView.setImageResource(R.drawable.ic_checked_box_36dp);
+            checkmarkBoxView.setImageResource(R.drawable.ic_checked_circle_36dp);
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             textView.setTextColor(mContext.getResources().getColor(R.color.colorStrikeThroughGray));
         }
         else
         {
-            checkmarkBoxView.setImageResource(R.drawable.ic_unchecked_box_36dp);
+            checkmarkBoxView.setImageResource(R.drawable.ic_unchecked_circle_36dp);
             textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             textView.setTextColor(mContext.getResources().getColor(R.color.colorText));
         }
