@@ -1,17 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/subTaskSingleView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@null"
-    android:imeOptions="actionDone"
-    android:inputType="text"
-    android:padding="8dp"
-    android:text=""
-    android:textColor="@color/colorText"
-    android:textSize="16sp"
-    tools:ignore="LabelFor,SpeakableTextPresentCheck"
-    android:importantForAutofill="no">
+    android:orientation="horizontal">
 
-</EditText>
+    <ImageView
+        android:id="@+id/checkmark_box"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_unchecked_circle_36dp"
+        tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/subTaskSingleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
+        android:padding="12dp"
+        android:text=""
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck"
+        android:importantForAutofill="no"/>
+</LinearLayout>

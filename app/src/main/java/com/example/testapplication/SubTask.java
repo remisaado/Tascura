@@ -6,11 +6,13 @@ import android.os.Parcelable;
 public class SubTask implements Parcelable {
     private String subTaskName;
     private final String subTaskId;
+    private final boolean isChecked;
 
-    SubTask(String subTaskName, String subTaskId)
+    SubTask(String subTaskName, String subTaskId, boolean isChecked)
     {
         this.subTaskName = subTaskName;
         this.subTaskId = subTaskId;
+        this.isChecked = isChecked;
     }
 
     public String getSubTaskName()
@@ -21,6 +23,11 @@ public class SubTask implements Parcelable {
     public String getSubTaskId()
     {
         return subTaskId;
+    }
+
+    public boolean getIsChecked()
+    {
+        return isChecked;
     }
 
     public void setSubTaskName(String subTaskName)
@@ -35,7 +42,8 @@ public class SubTask implements Parcelable {
         {
             String subTaskName = in.readString();
             String subTaskId = in.readString();
-            return new SubTask(subTaskName, subTaskId);
+            boolean isChecked = in.readByte() != 0;
+            return new SubTask(subTaskName, subTaskId, isChecked);
         }
 
         @Override
@@ -56,11 +64,13 @@ public class SubTask implements Parcelable {
     {
         parcel.writeString(subTaskName);
         parcel.writeString(subTaskId);
+        parcel.writeByte((byte) (isChecked ? 1 : 0));
     }
 
     public static class SubTaskBuilder {
         private String subTaskName;
         private String subTaskId;
+        private boolean isChecked;
 
         public SubTaskBuilder subTaskName(String subTaskName)
         {
@@ -74,9 +84,15 @@ public class SubTask implements Parcelable {
             return this;
         }
 
+        public SubTaskBuilder isChecked(boolean isChecked)
+        {
+            this.isChecked = isChecked;
+            return this;
+        }
+
         public SubTask build()
         {
-            return new SubTask(subTaskName, subTaskId);
+            return new SubTask(subTaskName, subTaskId, isChecked);
         }
 
     }

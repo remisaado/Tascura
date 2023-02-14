@@ -7,4 +7,5 @@ public class DatabaseNodes {
     public static final String IS_CHECKED = "isChecked";
     public static final String TASK_INFORMATION = "taskInformation";
     public static final String TASK_NAME = "taskName";
+    public static final String SUB_TASK_NAME = "subTaskName";
 }

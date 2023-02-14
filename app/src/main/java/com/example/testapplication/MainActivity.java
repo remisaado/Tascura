@@ -406,18 +406,25 @@ public class MainActivity extends AppCompatActivity
                     Object nameValue = snapshot.child(DatabaseNodes.TASK_NAME).getValue();
                     Object informationValue = snapshot.child(DatabaseNodes.TASK_INFORMATION).getValue();
                     Object isCheckedValue = snapshot.child(DatabaseNodes.IS_CHECKED).getValue();
+                    Log.d("TAG", "onDataChange: " + value);
 
                     ArrayList<SubTask> subTasks = new ArrayList<>();
 
                     for (DataSnapshot subTask : snapshot.child(DatabaseNodes.SUB_TASKS_LIST).getChildren())
                     {
-                        if (subTask.getValue() != null)
+                        Object subValue = subTask.getValue();
+                        Object subNameValue = subTask.child(DatabaseNodes.SUB_TASK_NAME).getValue();
+                        Object subIsCheckedValue = subTask.child(DatabaseNodes.IS_CHECKED).getValue();
+                        Log.d("TAG", "onDataChange sub: " + subValue);
+
+                        if (subValue != null && subNameValue != null && subIsCheckedValue != null)
                         {
-                            String subValue = subTask.getValue().toString();
-                            String subKey = subTask.getKey();
+                            boolean subIsChecked = (boolean) subIsCheckedValue;
+
                             SubTask newSubTask = new SubTask.SubTaskBuilder()
-                                    .subTaskName(subValue)
-                                    .subTaskId(subKey)
+                                    .subTaskName(subNameValue.toString())
+                                    .subTaskId(subTask.getKey())
+                                    .isChecked(subIsChecked)
                                     .build();
 
                             subTasks.add(newSubTask);
