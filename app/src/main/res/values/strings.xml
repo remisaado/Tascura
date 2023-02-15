@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestApplication</string>
+    <string name="app_name">Tascura</string>
     <string name="enter_new_task">Enter new task</string>
     <string name="create_a_new_list">Create a new list</string>
     <string name="enter_name_of_new_list">Enter name of new list</string>

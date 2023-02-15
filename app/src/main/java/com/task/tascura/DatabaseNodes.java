@@ -1,4 +1,4 @@
-package com.example.testapplication;
+package com.task.tascura;
 
 public class DatabaseNodes {
     public static final String USERS = "Users";

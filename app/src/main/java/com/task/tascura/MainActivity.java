@@ -1,4 +1,4 @@
-package com.example.testapplication;
+package com.task.tascura;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;

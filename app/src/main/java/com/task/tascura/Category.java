@@ -1,4 +1,4 @@
-package com.example.testapplication;
+package com.task.tascura;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package com.example.testapplication;
+package com.task.tascura;
 
 import androidx.appcompat.app.AppCompatActivity;
 
