@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity
     {
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference();
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 categories.clear();
@@ -183,8 +183,8 @@ public class MainActivity extends AppCompatActivity
                             Object value = snapshot.child(snapshot.getKey()).getValue();
                             if (value != null)
                             {
-                                    categories.add(new Category(value.toString(), snapshot.getKey()));
-                                    spinnerAdapter.notifyDataSetChanged();
+                                categories.add(new Category(value.toString(), snapshot.getKey()));
+                                spinnerAdapter.notifyDataSetChanged();
                             }
                         }
                     }
@@ -260,7 +260,8 @@ public class MainActivity extends AppCompatActivity
                         builder.setTitle(getString(R.string.dialog_delete_title))
                                 .setMessage(getString(R.string.dialog_delete_message))
                                 .setPositiveButton(getString(R.string.dialog_delete_positive_button), dialogClickListener)
-                                .setNegativeButton(getString(R.string.dialog_delete_negative_button), dialogClickListener).show();
+                                .setNegativeButton(getString(R.string.dialog_delete_negative_button), dialogClickListener)
+                                .show();
                     }
                     else
                     {
@@ -406,7 +407,6 @@ public class MainActivity extends AppCompatActivity
                     Object nameValue = snapshot.child(DatabaseNodes.TASK_NAME).getValue();
                     Object informationValue = snapshot.child(DatabaseNodes.TASK_INFORMATION).getValue();
                     Object isCheckedValue = snapshot.child(DatabaseNodes.IS_CHECKED).getValue();
-                    Log.d("TAG", "onDataChange: " + value);
 
                     ArrayList<SubTask> subTasks = new ArrayList<>();
 
@@ -415,7 +415,6 @@ public class MainActivity extends AppCompatActivity
                         Object subValue = subTask.getValue();
                         Object subNameValue = subTask.child(DatabaseNodes.SUB_TASK_NAME).getValue();
                         Object subIsCheckedValue = subTask.child(DatabaseNodes.IS_CHECKED).getValue();
-                        Log.d("TAG", "onDataChange sub: " + subValue);
 
                         if (subValue != null && subNameValue != null && subIsCheckedValue != null)
                         {
