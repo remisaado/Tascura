@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorSecondary</item>
         <item name="android:textColor">@color/colorText</item>
         <item name="android:navigationBarColor">@color/colorSecondary</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
@@ -15,5 +16,10 @@
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:background">@color/colorSecondary</item>
     </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen_image</item>
+    </style>
+
 
 </resources>
