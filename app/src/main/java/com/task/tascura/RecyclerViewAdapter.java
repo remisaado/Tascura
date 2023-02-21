@@ -1,15 +1,19 @@
 package com.task.tascura;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
 
-        return new MyViewHolder(view, mOnItemListener);
+        return new MyViewHolder(view, mOnItemListener, list);
     }
 
     @Override
@@ -105,14 +109,72 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     {
         TextView textView;
         OnItemListener onItemListener;
+        ArrayList<Task> list;
 
-        MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
+        MyViewHolder(@NonNull View itemView, OnItemListener onItemListener, ArrayList<Task> list) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.singleView);
             this.onItemListener = onItemListener;
+            this.list = list;
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(view -> {
+                onLongClick();
+                return true;
+            });
+        }
+
+        private void onLongClick()
+        {
+            String text = textView.getText().toString();
+
+            final EditText input = new EditText(itemView.getContext());
+            input.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.edit_text_background));
+            input.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorText));
+            input.setText(text);
+            input.setSingleLine();
+            input.setImeOptions(EditorInfo.IME_ACTION_SEND);
+            input.setPadding(28, 28, 28, 28);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext(), R.style.DialogTheme);
+            builder.setTitle(R.string.dialog_edit_title)
+                    .setMessage(R.string.dialog_edit_message)
+                    .setView(input)
+                    .setPositiveButton(R.string.dialog_edit_positive_button, (dialogInterface, i) -> {
+                        String editedText = input.getText().toString();
+                        saveEditedTaskName(itemView.getContext(), editedText);
+                    })
+                    .setNegativeButton(R.string.dialog_edit_negative_button, (dialogInterface, i) -> dialogInterface.cancel());
+
+            AlertDialog dialog = builder.show();
+
+            input.setOnEditorActionListener((textView, actionId, keyEvent) ->
+            {
+                if (actionId == EditorInfo.IME_ACTION_SEND)
+                {
+                    String editedText = input.getText().toString();
+                    saveEditedTaskName(itemView.getContext(), editedText);
+                    dialog.dismiss();
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        private void saveEditedTaskName(Context mContext, String editedText)
+        {
+            SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+            String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
+
+            FirebaseHelper firebaseHelper = new FirebaseHelper();
+
+            Task task = list.get(getBindingAdapterPosition());
+            String taskId = task.getTaskId();
+
+            DatabaseReference databaseReference = firebaseHelper.getDatabaseReference();
+            databaseReference.child(categoryId).child(DatabaseNodes.TASKS)
+                    .child(taskId).child(DatabaseNodes.TASK_NAME).setValue(editedText);
         }
 
         @Override

@@ -38,6 +38,11 @@
     <string name="dialog_delete_positive_button">Delete</string>
     <string name="dialog_delete_negative_button">Cancel</string>
 
+    <string name="dialog_edit_title">Edit Task</string>
+    <string name="dialog_edit_message">Edit the name of your task</string>
+    <string name="dialog_edit_positive_button">OK</string>
+    <string name="dialog_edit_negative_button">Cancel</string>
+
     <string name="error_no_text_entered">You did not enter any text</string>
     <string name="error_list_already_exists">This list already exists</string>
 
