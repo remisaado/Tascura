@@ -17,6 +17,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorText));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorText));
 
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
