@@ -130,7 +130,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             String text = textView.getText().toString();
 
             final EditText input = new EditText(itemView.getContext());
-            input.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.edit_text_background));
+            input.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.edit_text_dialog));
             input.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorText));
             input.setText(text);
             input.setSingleLine();
