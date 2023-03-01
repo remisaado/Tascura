@@ -52,7 +52,11 @@ public class RenameListActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> finish());
     }
 
-    private final TextView.OnEditorActionListener editorActionListener = (v, actionId, event) -> {
+    private final TextView.OnEditorActionListener editorActionListener = (v, actionId, event) ->
+    {
+        // Calls onRenameListClick method when the IME Button
+        // is pressed in the listEditText EditText.
+
         onRenameListClick();
 
         return true;
@@ -60,6 +64,8 @@ public class RenameListActivity extends AppCompatActivity {
 
     private void onRenameListClick()
     {
+        // Renames the chosen list in the categories ArrayList and in Firebase database.
+
         String categoryId = categories.get(spinnerPosition).getCategoryId();
 
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
@@ -79,6 +85,7 @@ public class RenameListActivity extends AppCompatActivity {
         }
         else
         {
+            // Sets error to the EditText if no text was entered.
             listEditText.setError(getString(R.string.error_no_text_entered));
             listEditText.requestFocus();
         }

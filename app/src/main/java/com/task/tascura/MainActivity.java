@@ -253,7 +253,8 @@ public class MainActivity extends AppCompatActivity
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    private final TextView.OnEditorActionListener editorActionListener = (v, actionId, event) -> {
+    private final TextView.OnEditorActionListener editorActionListener = (v, actionId, event) ->
+    {
         // Calls onAddTaskClick method when the IME Button
         // is pressed in the taskEditText EditText.
 

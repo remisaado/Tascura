@@ -39,6 +39,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     void buttonDefault()
     {
+        // Sets the send button to default mode.
         sendButton.setText(R.string.send_new_password);
         sendButton.setEnabled(true);
         sendButton.setAlpha(1);
@@ -46,6 +47,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     void buttonLoading()
     {
+        // Sets the send button to loading mode.
         sendButton.setText(R.string.sending);
         sendButton.setEnabled(false);
         sendButton.setAlpha(0.5f);
@@ -53,6 +55,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void sendPasswordResetEmail()
     {
+        // Method for sending a password reset email.
+
         String email = emailEditText.getText().toString();
 
         if (TextUtils.isEmpty(email))
@@ -67,9 +71,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
         else
         {
+            // Sets the button to loading mode while attempting to send email.
             buttonLoading();
 
-            mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+            mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task ->
+            {
+                // Attempts to send the password reset email to the provided email.
+
+                // Sets the button to default mode when attempt is finished.
                 buttonDefault();
 
                 if (!task.isSuccessful())

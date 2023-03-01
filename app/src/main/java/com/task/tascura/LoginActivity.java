@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void buttonDefault()
     {
+        // Sets the log in button to default mode.
         logInButton.setText(R.string.log_in);
         logInButton.setEnabled(true);
         logInButton.setAlpha(1);
@@ -56,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void buttonLoading()
     {
+        // Sets the log in button to loading mode.
         logInButton.setText(R.string.logging_in);
         logInButton.setEnabled(false);
         logInButton.setAlpha(0.5f);
@@ -63,6 +65,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void logInUser()
     {
+        // Method for logging in the user.
+
         String email = logInEmailEditText.getText().toString();
         String password = logInPasswordEditText.getText().toString();
 
@@ -78,13 +82,21 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
+            // Sets the button to loading mode while attempting to log in user.
             buttonLoading();
 
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task ->
+            {
+                // Attempts to log in the user of the provided email and password.
+
+                // Sets the button to default mode when attempt is finished.
                 buttonDefault();
 
                 if (!task.isSuccessful())
                 {
+                    // Checks for different error codes in switch and
+                    // provides feedback to user if task is unsuccessful.
+
                     String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
 
                     switch (errorCode)
@@ -109,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    // Starts MainActivity if log in is successful.
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);

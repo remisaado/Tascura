@@ -1,6 +1,7 @@
 package com.task.tascura;
 
 public class DatabaseNodes {
+    // Nodes for the Firebase database.
     public static final String USERS = "Users";
     public static final String TASKS = "Tasks";
     public static final String SUB_TASKS_LIST = "SubTasksList";

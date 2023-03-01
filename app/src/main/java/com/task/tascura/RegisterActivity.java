@@ -44,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     void buttonDefault()
     {
+        // Sets the register button to default mode.
         registerButton.setText(R.string.register);
         registerButton.setEnabled(true);
         registerButton.setAlpha(1);
@@ -51,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     void buttonLoading()
     {
+        // Sets the register button to loading mode.
         registerButton.setText(R.string.registering);
         registerButton.setEnabled(false);
         registerButton.setAlpha(0.5f);
@@ -58,6 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void createUser()
     {
+        // Method for creating a new user.
+
         String email = registerEmailEditText.getText().toString();
         String password = registerPasswordEditText.getText().toString();
 
@@ -73,13 +77,21 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else
         {
+            // Sets the button to loading mode while attempting to log in user.
             buttonLoading();
 
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task ->
+            {
+                // Attempts to create new user with the provided email and password.
+
+                // Sets the button to default mode when attempt is finished.
                 buttonDefault();
 
                 if (!task.isSuccessful())
                 {
+                    // Checks for different error codes in switch and
+                    // provides feedback to user if task is unsuccessful.
+
                     String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
 
                     switch (errorCode)
@@ -104,6 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    // Starts LoginActivity is user creation is successful.
                     Toast.makeText(RegisterActivity.this, this.getString(R.string.toast_user_registered_successfully), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 }

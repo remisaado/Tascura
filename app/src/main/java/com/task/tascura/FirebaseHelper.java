@@ -15,6 +15,7 @@ public class FirebaseHelper {
 
     public DatabaseReference getDatabaseReference()
     {
+        // Get method for the Firebase database reference initialization to prevent duplication.
         if (mAuth.getCurrentUser() != null)
         {
             String userId = mAuth.getCurrentUser().getUid();
