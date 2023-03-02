@@ -76,18 +76,24 @@ public class TaskItemActivity extends AppCompatActivity {
 
     private void initRecyclerView()
     {
+        // Initializes and sets up a RecyclerView with a
+        // LinearLayoutManager and a RecyclerViewAdapter to display a list of items.
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         subTasksRecyclerViewAdapter = new SubTasksRecyclerViewAdapter(list, superTask);
         recyclerView.setAdapter(subTasksRecyclerViewAdapter);
+        // Attaches an ItemTouchHelper to the RecyclerView for swipe functionality.
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
+        // Adds a divider between each item in the list using a DividerItemDecoration.
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider_line, null));
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    private final TextView.OnEditorActionListener editorActionListener = (textView, i, keyEvent) -> {
+    private final TextView.OnEditorActionListener editorActionListener = (textView, i, keyEvent) ->
+    {
+        // Calls method when the IME Button is pressed depending on which EditText it was pressed in.
 
         if (subTaskEditText.equals(textView))
         {
@@ -102,6 +108,7 @@ public class TaskItemActivity extends AppCompatActivity {
     };
 
     private final View.OnFocusChangeListener onFocusChangeListener = (view, hasFocus) -> {
+        // Update task information when focus is lost from informationEditText.
         if (!hasFocus)
         {
             onAddInformationClick();
@@ -110,6 +117,8 @@ public class TaskItemActivity extends AppCompatActivity {
 
     private void onAddSubTaskClick()
     {
+        // Adds a subtask to the list ArrayList and the Firebase database.
+
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
                 .child(categoryId).child(DatabaseNodes.TASKS).child(taskId).child(DatabaseNodes.SUB_TASKS_LIST);
 
@@ -140,6 +149,8 @@ public class TaskItemActivity extends AppCompatActivity {
 
     private void onAddInformationClick()
     {
+        // Adds/edits task information of task.
+
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
                 .child(categoryId).child(DatabaseNodes.TASKS).child(taskId);
 
@@ -148,14 +159,20 @@ public class TaskItemActivity extends AppCompatActivity {
         databaseReference.child(DatabaseNodes.TASK_INFORMATION).setValue(text);
     }
 
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT)
+    {
         @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target)
+        {
             return false;
         }
 
         @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction)
+        {
+            // Deletes a subtask item from the list ArrayList and the
+            // Firebase database on left swipe in the RecyclerView.
+
             DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
                     .child(categoryId).child(DatabaseNodes.TASKS).child(taskId).child(DatabaseNodes.SUB_TASKS_LIST);
 
@@ -169,7 +186,9 @@ public class TaskItemActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive)
+        {
+            // Draws a red background and a trash can icon to the left swipe.
 
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(TaskItemActivity.this, R.color.colorRed))
@@ -184,7 +203,8 @@ public class TaskItemActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
+        // Calls onAddInformationClick onStop to edit task information
+        // before leaving activity, in case any changes were made before last save.
         onAddInformationClick();
     }
 }

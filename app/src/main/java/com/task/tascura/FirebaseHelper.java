@@ -5,7 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseHelper {
-
+    // Helper class for Firebase interactions.
     private final FirebaseAuth mAuth;
 
     public FirebaseHelper()

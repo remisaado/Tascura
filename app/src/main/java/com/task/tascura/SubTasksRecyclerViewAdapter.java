@@ -33,14 +33,20 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
     @NonNull
     @Override
-    public SubTasksRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SubTasksRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
+        // Inflate the layout for each item in the RecyclerView.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_task_single_view, parent, false);
 
+        // Return a new ViewHolder with the inflated layout.
         return new MyViewHolder(view, task);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SubTasksRecyclerViewAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SubTasksRecyclerViewAdapter.MyViewHolder holder, int position)
+    {
+        // Bind data to the ViewHolder for each item in the RecyclerView.
+
         holder.customEditTextListener.updatePosition(position);
         String currentText = list.get(position).getSubTaskName();
         holder.customEditTextListener.updateCurrentText(currentText);
@@ -57,14 +63,17 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
     void checkIfChecked(ImageView checkmarkBoxView, EditText editText, Context mContext, int position)
     {
+        // Check if the task at the current position is checked and update the checkmark box and text accordingly.
         if (list.get(position).getIsChecked())
         {
+            // Set the checkmark box image to the checked circle and add a strike-through to the text.
             checkmarkBoxView.setImageResource(R.drawable.ic_checked_circle_30dp);
             editText.setPaintFlags(editText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             editText.setTextColor(mContext.getResources().getColor(R.color.colorStrikeThroughGray));
         }
         else
         {
+            // Set the checkmark box image to the unchecked circle and remove the strike-through from the text.
             checkmarkBoxView.setImageResource(R.drawable.ic_unchecked_circle_30dp);
             editText.setPaintFlags(editText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             editText.setTextColor(mContext.getResources().getColor(R.color.colorText));
@@ -73,6 +82,8 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
     void onCheckMarkClick(Context mContext, int position)
     {
+        // Toggle the task's checked state when the checkmark box is clicked.
+
         SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
         String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
@@ -87,7 +98,7 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
         HashMap<String, Object> subTaskUpdates = new HashMap<>();
         subTaskUpdates.put(DatabaseNodes.IS_CHECKED, !subTask.getIsChecked());
-
+        // Updates the value of isChecked in the Firebase database.
         databaseReference.updateChildren(subTaskUpdates);
 
         subTask = new SubTask.SubTaskBuilder()
@@ -102,7 +113,9 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
+        // Returns the number of items in the list.
         return list.size();
     }
 
@@ -138,11 +151,13 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
 
         public void updateCurrentText(String currentText)
         {
+            // updates the current text of the subtask.
             this.currentText = currentText;
         }
 
         public void updatePosition(int position)
         {
+            // updates the position of the subtask in the list.
             this.position = position;
         }
 
@@ -162,7 +177,7 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
             if (currentText != null)
             {
                 String subTaskId = list.get(position).getSubTaskId();
-
+                // Update the subtask name in the list and in the Firebase database.
                 list.get(position).setSubTaskName(text);
                 databaseReference.child(categoryId).child(DatabaseNodes.TASKS).child(taskId)
                         .child(DatabaseNodes.SUB_TASKS_LIST).child(subTaskId)

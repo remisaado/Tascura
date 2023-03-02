@@ -35,14 +35,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
+        // Inflate the layout for each item in the RecyclerView.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
 
+        // Return a new ViewHolder with the inflated layout and the OnItemListener.
         return new MyViewHolder(view, mOnItemListener, list);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position)
+    {
+        // Bind data to the ViewHolder for each item in the RecyclerView.
+
         holder.textView.setText(list.get(position).getTaskName());
 
         Context mContext = holder.textView.getContext();
@@ -56,14 +62,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     void checkIfChecked(ImageView checkmarkBoxView, TextView textView, Context mContext, int position)
     {
+        // Check if the task at the current position is checked and update the checkmark box and text accordingly.
         if (list.get(position).getIsChecked())
         {
+            // Set the checkmark box image to the checked circle and add a strike-through to the text.
             checkmarkBoxView.setImageResource(R.drawable.ic_checked_circle_36dp);
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             textView.setTextColor(mContext.getResources().getColor(R.color.colorStrikeThroughGray));
         }
         else
         {
+            // Set the checkmark box image to the unchecked circle and remove the strike-through from the text.
             checkmarkBoxView.setImageResource(R.drawable.ic_unchecked_circle_36dp);
             textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             textView.setTextColor(mContext.getResources().getColor(R.color.colorText));
@@ -72,6 +81,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     void onCheckMarkClick(Context mContext, int position)
     {
+        // Toggle the task's checked state when the checkmark box is clicked.
+
         SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
         String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
@@ -84,7 +95,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
         HashMap<String, Object> taskUpdates = new HashMap<>();
         taskUpdates.put(DatabaseNodes.IS_CHECKED, !task.getIsChecked());
-
+        // Updates the value of isChecked in the Firebase database.
         databaseReference.updateChildren(taskUpdates);
 
         task = new Task.TaskBuilder()
@@ -101,7 +112,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
+        // Returns the number of items in the list.
         return list.size();
     }
 
@@ -127,8 +140,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
         private void onLongClick()
         {
-            String text = textView.getText().toString();
+            // Handles the long click event on an item in the RecyclerView,
+            // opens a Dialog with an EditText with the name of the task to edit the task name.
 
+            String text = textView.getText().toString();
+            // Creates the EditText for user input and style the look and behavior of it.
             final EditText input = new EditText(itemView.getContext());
             input.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.edit_text_dialog));
             input.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.colorText));
@@ -137,22 +153,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             input.setImeOptions(EditorInfo.IME_ACTION_SEND);
             input.setPadding(28, 28, 28, 28);
 
+            // Create an AlertDialog for the user to edit the task name.
             AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext(), R.style.DialogTheme);
             builder.setTitle(R.string.dialog_edit_title)
                     .setMessage(R.string.dialog_edit_message)
                     .setView(input)
-                    .setPositiveButton(R.string.dialog_edit_positive_button, (dialogInterface, i) -> {
+                    .setPositiveButton(R.string.dialog_edit_positive_button, (dialogInterface, i) ->
+                    {
+                        // When the positive button is clicked, save the edited task name.
                         String editedText = input.getText().toString();
                         saveEditedTaskName(itemView.getContext(), editedText);
                     })
                     .setNegativeButton(R.string.dialog_edit_negative_button, (dialogInterface, i) -> dialogInterface.cancel());
-
+            // Show the AlertDialog.
             AlertDialog dialog = builder.show();
 
             input.setOnEditorActionListener((textView, actionId, keyEvent) ->
             {
+                // Set the listener for the send button on the EditText.
                 if (actionId == EditorInfo.IME_ACTION_SEND)
                 {
+                    // When the send button is clicked, save the edited task name and dismiss the dialog.
                     String editedText = input.getText().toString();
                     saveEditedTaskName(itemView.getContext(), editedText);
                     dialog.dismiss();
@@ -164,6 +185,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
         private void saveEditedTaskName(Context mContext, String editedText)
         {
+            // Method to save the edited task name.
+
             SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
             String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
