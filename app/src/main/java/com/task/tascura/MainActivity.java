@@ -236,6 +236,16 @@ public class MainActivity extends AppCompatActivity
         spinner.setSelection(spinnerChoice, true);
     }
 
+    void setData()
+    {
+        // Sets/saves the current spinner choice to shared preferences.
+        int spinnerChoice = spinner.getSelectedItemPosition();
+        SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        sharedPrefsEditor.putInt(SPINNER_CHOICE, spinnerChoice);
+        sharedPrefsEditor.apply();
+    }
+
     private void initRecyclerView()
     {
         // Initializes and sets up a RecyclerView with a
@@ -524,22 +534,13 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
         sharedPrefsEditor.putString(CATEGORY_ID_CHOICE, categoryId);
         sharedPrefsEditor.apply();
+
+        setData();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent)
     {
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Saves spinner choice onPause.
-        int spinnerChoice = spinner.getSelectedItemPosition();
-        SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
-        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
-        sharedPrefsEditor.putInt(SPINNER_CHOICE, spinnerChoice);
-        sharedPrefsEditor.apply();
     }
 
 }
