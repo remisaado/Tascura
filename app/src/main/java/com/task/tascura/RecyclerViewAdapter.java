@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -26,11 +27,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     private final ArrayList<Task> list;
     private final OnItemListener mOnItemListener;
     private final FirebaseHelper firebaseHelper = new FirebaseHelper();
+    private final RecyclerViewAdapter adapter;
 
     RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
     {
         this.list = list;
         this.mOnItemListener = onItemListener;
+        adapter = this;
     }
 
     @NonNull
@@ -39,9 +42,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     {
         // Inflate the layout for each item in the RecyclerView.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_view, parent, false);
-
         // Return a new ViewHolder with the inflated layout and the OnItemListener.
-        return new MyViewHolder(view, mOnItemListener, list);
+        return new MyViewHolder(view, mOnItemListener, list, adapter);
     }
 
     @Override
@@ -123,22 +125,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         TextView textView;
         OnItemListener onItemListener;
         ArrayList<Task> list;
+        private final RecyclerViewAdapter adapter;
 
-        MyViewHolder(@NonNull View itemView, OnItemListener onItemListener, ArrayList<Task> list) {
+        MyViewHolder(@NonNull View itemView, OnItemListener onItemListener, ArrayList<Task> list, RecyclerViewAdapter adapter) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.singleView);
             this.onItemListener = onItemListener;
             this.list = list;
+            this.adapter = adapter;
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(view -> {
-                onLongClick();
+                onLongClick(getBindingAdapterPosition());
                 return true;
             });
         }
 
-        private void onLongClick()
+        private void onLongClick(int position)
         {
             // Handles the long click event on an item in the RecyclerView,
             // opens a Dialog with an EditText with the name of the task to edit the task name.
@@ -162,7 +166,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
                     {
                         // When the positive button is clicked, save the edited task name.
                         String editedText = input.getText().toString();
-                        saveEditedTaskName(itemView.getContext(), editedText);
+                        if (!editedText.isEmpty())
+                        {
+                        saveEditedTaskName(itemView.getContext(), editedText, position);
+                        }
                     })
                     .setNegativeButton(R.string.dialog_edit_negative_button, (dialogInterface, i) -> dialogInterface.cancel());
             // Show the AlertDialog.
@@ -175,7 +182,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
                 {
                     // When the send button is clicked, save the edited task name and dismiss the dialog.
                     String editedText = input.getText().toString();
-                    saveEditedTaskName(itemView.getContext(), editedText);
+                    if (!editedText.isEmpty())
+                    {
+                        saveEditedTaskName(itemView.getContext(), editedText, position);
+                    }
                     dialog.dismiss();
                     return true;
                 }
@@ -183,7 +193,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             });
         }
 
-        private void saveEditedTaskName(Context mContext, String editedText)
+        private void saveEditedTaskName(Context mContext, String editedText, int position)
         {
             // Method to save the edited task name.
 
@@ -191,13 +201,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
             FirebaseHelper firebaseHelper = new FirebaseHelper();
+            if (position != RecyclerView.NO_POSITION)
+            {
+                Task task = list.get(position);
+                String taskId = task.getTaskId();
 
-            Task task = list.get(getBindingAdapterPosition());
-            String taskId = task.getTaskId();
+                DatabaseReference databaseReference = firebaseHelper.getDatabaseReference();
+                databaseReference.child(categoryId).child(DatabaseNodes.TASKS)
+                        .child(taskId).child(DatabaseNodes.TASK_NAME).setValue(editedText);
+            }
+            else
+            {
+                Toast.makeText(mContext, "Operation failed, please try again later.", Toast.LENGTH_SHORT).show();
+            }
 
-            DatabaseReference databaseReference = firebaseHelper.getDatabaseReference();
-            databaseReference.child(categoryId).child(DatabaseNodes.TASKS)
-                    .child(taskId).child(DatabaseNodes.TASK_NAME).setValue(editedText);
+            adapter.notifyItemChanged(position);
         }
 
         @Override
