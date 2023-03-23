@@ -26,7 +26,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     private final ArrayList<Task> list;
     private final OnItemListener mOnItemListener;
-    private final FirebaseHelper firebaseHelper = new FirebaseHelper();
     private final RecyclerViewAdapter adapter;
 
     RecyclerViewAdapter(ArrayList<Task> list, OnItemListener onItemListener)
@@ -58,11 +57,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         TextView textView = holder.textView;
 
         checkIfChecked(checkmarkBoxView, textView, mContext, position);
-
-        checkmarkBoxView.setOnClickListener(v -> onCheckMarkClick(mContext, position));
     }
 
-    void checkIfChecked(ImageView checkmarkBoxView, TextView textView, Context mContext, int position)
+    private void checkIfChecked(ImageView checkmarkBoxView, TextView textView, Context mContext, int position)
     {
         // Check if the task at the current position is checked and update the checkmark box and text accordingly.
         if (list.get(position).getIsChecked())
@@ -79,38 +76,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             textView.setPaintFlags(textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             textView.setTextColor(mContext.getResources().getColor(R.color.colorText));
         }
-    }
-
-    void onCheckMarkClick(Context mContext, int position)
-    {
-        // Toggle the task's checked state when the checkmark box is clicked.
-
-        SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
-        String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
-
-        Task task = list.get(position);
-
-        String taskId = task.getTaskId();
-
-        DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
-                .child(categoryId).child(DatabaseNodes.TASKS).child(taskId);
-
-        HashMap<String, Object> taskUpdates = new HashMap<>();
-        taskUpdates.put(DatabaseNodes.IS_CHECKED, !task.getIsChecked());
-        // Updates the value of isChecked in the Firebase database.
-        databaseReference.updateChildren(taskUpdates);
-
-        task = new Task.TaskBuilder()
-                .taskName(task.getTaskName())
-                .taskId(task.getTaskId())
-                .taskInformation(task.getTaskInformation())
-                .subTasksList(task.getSubTasksList())
-                .isChecked(!task.getIsChecked())
-                .build();
-
-        list.set(position, task);
-
-        notifyItemChanged(position);
     }
 
     @Override
@@ -131,6 +96,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             super(itemView);
 
             textView = itemView.findViewById(R.id.singleView);
+            ImageView checkmarkBoxView = itemView.findViewById(R.id.checkmark_box);
             this.onItemListener = onItemListener;
             this.list = list;
             this.adapter = adapter;
@@ -140,6 +106,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
                 onLongClick(getBindingAdapterPosition());
                 return true;
             });
+            checkmarkBoxView.setOnClickListener(v -> onCheckMarkClick(getBindingAdapterPosition()));
         }
 
         private void onLongClick(int position)
@@ -214,6 +181,39 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             {
                 Toast.makeText(mContext, "Operation failed, please try again later.", Toast.LENGTH_SHORT).show();
             }
+
+            adapter.notifyItemChanged(position);
+        }
+
+        private void onCheckMarkClick(int position)
+        {
+            // Toggle the task's checked state when the checkmark box is clicked.
+
+            SharedPreferences sharedPrefs = textView.getContext().getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+            String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
+
+            Task task = list.get(position);
+
+            String taskId = task.getTaskId();
+
+            FirebaseHelper firebaseHelper = new FirebaseHelper();
+            DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
+                    .child(categoryId).child(DatabaseNodes.TASKS).child(taskId);
+
+            HashMap<String, Object> taskUpdates = new HashMap<>();
+            taskUpdates.put(DatabaseNodes.IS_CHECKED, !task.getIsChecked());
+            // Updates the value of isChecked in the Firebase database.
+            databaseReference.updateChildren(taskUpdates);
+
+            task = new Task.TaskBuilder()
+                    .taskName(task.getTaskName())
+                    .taskId(task.getTaskId())
+                    .taskInformation(task.getTaskInformation())
+                    .subTasksList(task.getSubTasksList())
+                    .isChecked(!task.getIsChecked())
+                    .build();
+
+            list.set(position, task);
 
             adapter.notifyItemChanged(position);
         }

@@ -57,11 +57,9 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
         EditText editText = holder.editText;
 
         checkIfChecked(checkmarkBoxView, editText, mContext, position);
-
-        checkmarkBoxView.setOnClickListener(v -> onCheckMarkClick(mContext, position));
     }
 
-    void checkIfChecked(ImageView checkmarkBoxView, EditText editText, Context mContext, int position)
+    private void checkIfChecked(ImageView checkmarkBoxView, EditText editText, Context mContext, int position)
     {
         // Check if the task at the current position is checked and update the checkmark box and text accordingly.
         if (list.get(position).getIsChecked())
@@ -80,38 +78,6 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
         }
     }
 
-    void onCheckMarkClick(Context mContext, int position)
-    {
-        // Toggle the task's checked state when the checkmark box is clicked.
-
-        SharedPreferences sharedPrefs = mContext.getSharedPreferences(MainActivity.SHARED_PREFS, 0);
-        String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
-
-        SubTask subTask = list.get(position);
-
-        String taskId = task.getTaskId();
-        String subTaskId = subTask.getSubTaskId();
-
-        DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
-                .child(categoryId).child(DatabaseNodes.TASKS).child(taskId)
-                .child(DatabaseNodes.SUB_TASKS_LIST).child(subTaskId);
-
-        HashMap<String, Object> subTaskUpdates = new HashMap<>();
-        subTaskUpdates.put(DatabaseNodes.IS_CHECKED, !subTask.getIsChecked());
-        // Updates the value of isChecked in the Firebase database.
-        databaseReference.updateChildren(subTaskUpdates);
-
-        subTask = new SubTask.SubTaskBuilder()
-                .subTaskName(subTask.getSubTaskName())
-                .subTaskId(subTask.getSubTaskId())
-                .isChecked(!subTask.getIsChecked())
-                .build();
-
-        list.set(position, subTask);
-
-        notifyItemChanged(position);
-    }
-
     @Override
     public int getItemCount()
     {
@@ -127,12 +93,47 @@ public class SubTasksRecyclerViewAdapter extends RecyclerView.Adapter <SubTasksR
         public MyViewHolder(@NonNull View itemView, Task task) {
             super(itemView);
 
+            ImageView checkmarkBoxView = itemView.findViewById(R.id.checkmark_box);
+
             SharedPreferences sharedPrefs = itemView.getContext().getSharedPreferences(MainActivity.SHARED_PREFS, 0);
             String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
 
             editText = itemView.findViewById(R.id.subTaskSingleView);
             this.customEditTextListener = new CustomEditTextListener(task, categoryId);
             editText.addTextChangedListener(customEditTextListener);
+            checkmarkBoxView.setOnClickListener(v -> onCheckMarkClick(getBindingAdapterPosition()));
+        }
+
+        private void onCheckMarkClick(int position)
+        {
+            // Toggle the task's checked state when the checkmark box is clicked.
+
+            SharedPreferences sharedPrefs = editText.getContext().getSharedPreferences(MainActivity.SHARED_PREFS, 0);
+            String categoryId = sharedPrefs.getString(MainActivity.CATEGORY_ID_CHOICE, "");
+
+            SubTask subTask = list.get(position);
+
+            String taskId = task.getTaskId();
+            String subTaskId = subTask.getSubTaskId();
+
+            DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
+                    .child(categoryId).child(DatabaseNodes.TASKS).child(taskId)
+                    .child(DatabaseNodes.SUB_TASKS_LIST).child(subTaskId);
+
+            HashMap<String, Object> subTaskUpdates = new HashMap<>();
+            subTaskUpdates.put(DatabaseNodes.IS_CHECKED, !subTask.getIsChecked());
+            // Updates the value of isChecked in the Firebase database.
+            databaseReference.updateChildren(subTaskUpdates);
+
+            subTask = new SubTask.SubTaskBuilder()
+                    .subTaskName(subTask.getSubTaskName())
+                    .subTaskId(subTask.getSubTaskId())
+                    .isChecked(!subTask.getIsChecked())
+                    .build();
+
+            list.set(position, subTask);
+
+            notifyItemChanged(position);
         }
     }
 
