@@ -8,12 +8,20 @@
     android:background="@drawable/gradient_background"
     android:paddingHorizontal="24dp">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo_white"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/logo"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/register"
         android:textSize="30sp"
-        android:layout_marginTop="120dp"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:gravity="center_horizontal"/>

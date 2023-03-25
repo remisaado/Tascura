@@ -47,4 +47,5 @@
     <string name="error_list_already_exists">This list already exists</string>
 
     <string name="splash_screen">Splash screen</string>
+    <string name="logo">Logo</string>
 </resources>
