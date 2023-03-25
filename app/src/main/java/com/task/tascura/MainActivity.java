@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity
     ProgressBar progressBar;
     FirebaseAuth mAuth;
     private FirebaseHelper firebaseHelper;
+    ValueEventListener valueEventListenerOne;
+    ValueEventListener valueEventListenerTwo;
 
     public static final String KEY_NAME = "com.example.TestApplication.KEY";
     public static final String KEY_NAME_TWO = "com.example.TestApplication.KEY-TWO";
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.logOut)
         {
+            removeValueEventListeners();
             mAuth.signOut();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             return true;
@@ -172,7 +175,7 @@ public class MainActivity extends AppCompatActivity
 
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference();
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 categories.clear();
@@ -216,7 +219,10 @@ public class MainActivity extends AppCompatActivity
                 Log.w("Database error", databaseError.toException());
                 Toast.makeText(MainActivity.this, "Operation failed. Please try again later.", Toast.LENGTH_LONG).show();
             }
-        });
+        };
+        databaseReference.addValueEventListener(valueEventListener);
+        this.valueEventListenerOne = valueEventListener;
+
         // Sets up an ArrayAdapter to populate the Spinner with a
         // custom layout for the title and drop-down items
         // and sets the adapter to the spinner.
@@ -225,6 +231,29 @@ public class MainActivity extends AppCompatActivity
         spinner.setAdapter(spinnerAdapter);
         // OnItemSelectedListener is attached to spinner to handle user selections.
         spinner.setOnItemSelectedListener(this);
+    }
+
+    private void removeValueEventListeners()
+    {
+        // Removes ValueEventListeners, this method is called
+        // before logging out to prevent error messages on log out.
+        DatabaseReference databaseReferenceOne = firebaseHelper.getDatabaseReference();
+
+        if (valueEventListenerOne != null)
+        {
+            databaseReferenceOne.removeEventListener(valueEventListenerOne);
+            valueEventListenerOne = null;
+        }
+
+        String categoryId = categories.get(spinner.getSelectedItemPosition()).getCategoryId();
+        DatabaseReference databaseReferenceTwo = firebaseHelper.getDatabaseReference()
+                .child(categoryId).child(DatabaseNodes.TASKS);
+
+        if (valueEventListenerTwo != null)
+        {
+            databaseReferenceTwo.removeEventListener(valueEventListenerTwo);
+            valueEventListenerTwo = null;
+        }
     }
 
     void loadData()
@@ -347,15 +376,20 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
         SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
 
-        // Saves the first index as the spinner choice since the current choice is being deleted.
         sharedPrefsEditor.putInt(SPINNER_CHOICE, 0);
         sharedPrefsEditor.apply();
 
         categories.remove(spinnerPosition);
-
         databaseReference.removeValue();
 
         loadData();
+
+        if (spinnerPosition == 0)
+        {
+            // Calls populateLists() manually since onItemSelected is not called if the
+            // selection of the spinner does not change but remains at the same index
+            populateLists();
+        }
     }
 
     private void onAddTaskClick()
@@ -422,7 +456,6 @@ public class MainActivity extends AppCompatActivity
             list.remove(viewHolder.getBindingAdapterPosition());
 
             databaseReference.removeValue();
-
             recyclerViewAdapter.notifyItemRemoved(viewHolder.getBindingAdapterPosition());
         }
 
@@ -455,13 +488,23 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
+        populateLists();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent)
+    {
+    }
+
+    void populateLists()
+    {
         // This method is called when an item is selected in the spinner.
         String categoryId = categories.get(spinner.getSelectedItemPosition()).getCategoryId();
 
         DatabaseReference databaseReference = firebaseHelper.getDatabaseReference()
                 .child(categoryId).child(DatabaseNodes.TASKS);
 
-        databaseReference.addValueEventListener(new ValueEventListener()
+        ValueEventListener valueEventListener = new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
@@ -528,7 +571,9 @@ public class MainActivity extends AppCompatActivity
                 Log.w("Database error", databaseError.toException());
                 Toast.makeText(MainActivity.this, "Operation failed. Please try again later.", Toast.LENGTH_LONG).show();
             }
-        });
+        };
+        databaseReference.addValueEventListener(valueEventListener);
+        this.valueEventListenerTwo = valueEventListener;
         // Saves the categoryId of the selected spinner item to shared preferences.
         SharedPreferences sharedPrefs = getSharedPreferences(SHARED_PREFS, 0);
         SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
@@ -536,11 +581,6 @@ public class MainActivity extends AppCompatActivity
         sharedPrefsEditor.apply();
 
         setData();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent)
-    {
     }
 
 }
