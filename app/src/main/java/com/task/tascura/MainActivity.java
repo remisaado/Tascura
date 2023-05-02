@@ -1,10 +1,13 @@
 package com.task.tascura;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,9 +18,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,11 +30,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -40,8 +46,11 @@ import java.util.ArrayList;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity
-        implements RecyclerViewAdapter.OnItemListener, AdapterView.OnItemSelectedListener {
+        implements RecyclerViewAdapter.OnItemListener, AdapterView.OnItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    TextView deleteAccountButton;
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
@@ -70,6 +79,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigationView);
+        deleteAccountButton = findViewById(R.id.deleteAccountButton);
         recyclerView = findViewById(R.id.recyclerView);
         taskEditText = findViewById(R.id.taskEditText);
         addTaskButton = findViewById(R.id.addTaskButton);
@@ -78,6 +90,14 @@ public class MainActivity extends AppCompatActivity
         progressBar = findViewById(R.id.progressBar);
 
         mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null)
+        {
+            // Sets the current users email address to the TextView in the navigation header
+            View headerView = navigationView.getHeaderView(0);
+            TextView userEmailAddress = headerView.findViewById(R.id.userEmailAddress);
+            userEmailAddress.setText(mAuth.getCurrentUser().getEmail());
+        }
 
         firebaseHelper = new FirebaseHelper();
 
@@ -93,11 +113,75 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
         initRecyclerView();
+
+        deleteAccountButton.setOnClickListener(v -> onDeleteAccountClick());
 
         taskEditText.setOnEditorActionListener(editorActionListener);
 
         addTaskButton.setOnClickListener(v -> onAddTaskClick());
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // This method is called when an item in the drawer menu is selected.
+        // It checks the ID of the selected item and performs the appropriate action.
+
+        int id = item.getItemId();
+
+        if (id == R.id.addList)
+        {
+            Intent addIntent = new Intent(this, AddListActivity.class);
+            addIntent.putParcelableArrayListExtra(KEY_NAME, categories);
+            startActivity(addIntent);
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+        else if (id == R.id.renameList)
+        {
+            Intent renameIntent = new Intent(this, RenameListActivity.class);
+            renameIntent.putParcelableArrayListExtra(KEY_NAME, categories);
+            renameIntent.putExtra(KEY_NAME_TWO, spinner.getSelectedItemPosition());
+            startActivity(renameIntent);
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+        else if (id == R.id.deleteList)
+        {
+            deleteListDialog();
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+        else if (id == R.id.logOut)
+        {
+            removeValueEventListeners();
+            mAuth.signOut();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else
+        {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -115,57 +199,6 @@ public class MainActivity extends AppCompatActivity
         {
             // If a user is logged in, calls setSpinner function.
             setSpinner();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflates the menu layout and displays it on the toolbar.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // This method is called when an item in the options menu is selected.
-        // It checks the ID of the selected item and performs the appropriate action.
-
-        int id = item.getItemId();
-
-        if (id == R.id.addList)
-        {
-            Intent addIntent = new Intent(this, AddListActivity.class);
-            addIntent.putParcelableArrayListExtra(KEY_NAME, categories);
-            startActivity(addIntent);
-            return true;
-        }
-        else if (id == R.id.renameList)
-        {
-            Intent renameIntent = new Intent(this, RenameListActivity.class);
-            renameIntent.putParcelableArrayListExtra(KEY_NAME, categories);
-            renameIntent.putExtra(KEY_NAME_TWO, spinner.getSelectedItemPosition());
-            startActivity(renameIntent);
-            return true;
-        }
-        else if (id == R.id.deleteList)
-        {
-            deleteListDialog();
-            return true;
-        }
-        else if (id == R.id.logOut)
-        {
-            removeValueEventListeners();
-            mAuth.signOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            return true;
-        }
-        else
-        {
-            // If the ID of the selected item does not match any of the options above,
-            // return the result of the superclass method.
-            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -581,6 +614,74 @@ public class MainActivity extends AppCompatActivity
         sharedPrefsEditor.apply();
 
         setData();
+    }
+
+    private void onDeleteAccountClick()
+    {
+        // Opens a dialog upon account deletion cautioning the user that account and all
+        // data will permanently be deleted, requires account password for confirmation.
+        EditText input = new EditText(this);
+        input.setBackground(ContextCompat.getDrawable(this, R.drawable.edit_text_dialog));
+        input.setTextColor(ContextCompat.getColor(this, R.color.colorText));
+        input.setHintTextColor(ContextCompat.getColor(this, R.color.colorHintGray));
+        input.setHint("Password");
+        input.setSingleLine();
+        input.setPadding(28, 28, 28, 28);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which)
+            {
+                case DialogInterface.BUTTON_POSITIVE:
+                    deleteAccount(input.getText().toString());
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.DialogTheme);
+        builder.setTitle(getString(R.string.dialog_delete_account_title))
+                .setMessage(getString(R.string.dialog_delete_account_message))
+                .setView(input)
+                .setPositiveButton(getString(R.string.dialog_delete_positive_button), dialogClickListener)
+                .setNegativeButton(getString(R.string.dialog_delete_negative_button), dialogClickListener)
+                .show();
+    }
+
+    private void deleteAccount(String password)
+    {
+        // Deletes account data from Firebase Database
+        // and account from Firebase Authentication.
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null)
+        {
+            String email = mAuth.getCurrentUser().getEmail();
+            if (email != null)
+            {
+                AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+
+                user.reauthenticate(credential).addOnCompleteListener(task -> {
+                    if (task.isSuccessful())
+                    {
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(DatabaseNodes.USERS).child(user.getUid());
+                        removeValueEventListeners();
+                        userRef.removeValue();
+
+                        user.delete().addOnCompleteListener(task1 -> {
+                            Toast.makeText(MainActivity.this, R.string.toast_user_account_deleted, Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(this, R.string.toast_password_is_invalid, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
     }
 
 }

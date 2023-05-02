@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
 
-    <item
-        android:id="@+id/addList"
-        android:title="@string/menu_add_list"
-        app:showAsAction="never"/>
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/addList"
+            android:icon="@drawable/ic_add_24dp"
+            android:title="@string/menu_add_list" />
+    </group>
 
-    <item
-        android:id="@+id/renameList"
-        android:title="@string/menu_rename_list"
-        app:showAsAction="never"/>
+    <group android:id="@+id/group2">
+        <item
+            android:id="@+id/renameList"
+            android:icon="@drawable/ic_edit_24dp"
+            android:title="@string/menu_rename_list" />
+    </group>
 
-    <item
-        android:id="@+id/deleteList"
-        android:title="@string/menu_delete_list"
-        app:showAsAction="never"/>
+    <group android:id="@+id/group3">
+        <item
+            android:id="@+id/deleteList"
+            android:icon="@drawable/ic_delete_24dp"
+            android:title="@string/menu_delete_list" />
+    </group>
 
-    <item
-        android:id="@+id/logOut"
-        android:title="@string/menu_log_out"
-        app:showAsAction="never"/>
+    <group android:id="@+id/group4">
+        <item
+            android:id="@+id/logOut"
+            android:icon="@drawable/ic_logout_24dp"
+            android:title="@string/menu_log_out" />
+    </group>
 
 </menu>
