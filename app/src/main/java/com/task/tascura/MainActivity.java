@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -127,6 +130,19 @@ public class MainActivity extends AppCompatActivity
         taskEditText.setOnEditorActionListener(editorActionListener);
 
         addTaskButton.setOnClickListener(v -> onAddTaskClick());
+
+        // Apply window insets to avoid system UI overlap (status bar, notch, etc.)
+        ViewCompat.setOnApplyWindowInsetsListener(navigationView, new OnApplyWindowInsetsListener() {
+            @NonNull
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                int bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+
+                v.setPadding(v.getPaddingLeft(), topInset, v.getPaddingRight(), bottomInset);
+                return insets;
+            }
+        });
     }
 
     @Override

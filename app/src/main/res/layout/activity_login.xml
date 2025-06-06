@@ -1,79 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:orientation="vertical"
-    android:background="@drawable/gradient_background"
-    android:paddingHorizontal="24dp">
+    android:background="@drawable/gradient_background">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo_white"
-        android:layout_gravity="center"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="15dp"
-        android:contentDescription="@string/logo" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/log_in"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_background"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp">
 
-    <EditText
-        android:id="@+id/logInEmailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/edit_text_background"
-        android:textColorHint="@color/colorHintGray"
-        android:textColor="@android:color/white"
-        android:padding="16dp"
-        android:autofillHints="emailAddress" />
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="15dp"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/logo_white" />
 
-    <EditText
-        android:id="@+id/logInPasswordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:background="@drawable/edit_text_background"
-        android:textColorHint="@color/colorHintGray"
-        android:textColor="@android:color/white"
-        android:padding="16dp"
-        android:importantForAutofill="no" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/log_in"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/logInButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_background"
-        android:text="@string/log_in"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        <EditText
+            android:id="@+id/logInEmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints="emailAddress"
+            android:background="@drawable/edit_text_background"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/colorHintGray" />
 
-    <TextView
-        android:id="@+id/registerHereTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/register_here"
-        android:gravity="center_horizontal"/>
+        <EditText
+            android:id="@+id/logInPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/colorHintGray" />
 
-    <TextView
-        android:id="@+id/forgotPasswordTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:text="@string/forgot_password"
-        android:gravity="center_horizontal"/>
+        <Button
+            android:id="@+id/logInButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_background"
+            android:text="@string/log_in"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/registerHereTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="@string/register_here" />
+
+        <TextView
+            android:id="@+id/forgotPasswordTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:gravity="center_horizontal"
+            android:text="@string/forgot_password" />
+
+    </LinearLayout>
+
+</FrameLayout>

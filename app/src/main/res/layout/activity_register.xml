@@ -1,72 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity"
-    android:orientation="vertical"
-    android:background="@drawable/gradient_background"
-    android:paddingHorizontal="24dp">
+    android:background="@drawable/gradient_background">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo_white"
-        android:layout_gravity="center"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="15dp"
-        android:contentDescription="@string/logo"/>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:textSize="30sp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp">
 
-    <EditText
-        android:id="@+id/registerEmailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/edit_text_background"
-        android:textColorHint="@color/colorHintGray"
-        android:textColor="@android:color/white"
-        android:padding="16dp"
-        android:autofillHints="emailAddress" />
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo_white"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="15dp"
+            android:contentDescription="@string/logo"/>
 
-    <EditText
-        android:id="@+id/registerPasswordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/password"
-        android:background="@drawable/edit_text_background"
-        android:textColorHint="@color/colorHintGray"
-        android:textColor="@android:color/white"
-        android:padding="16dp"
-        android:inputType="textPassword"
-        android:importantForAutofill="no" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
 
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_background"
-        android:text="@string/register"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        <EditText
+            android:id="@+id/registerEmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/edit_text_background"
+            android:textColorHint="@color/colorHintGray"
+            android:textColor="@android:color/white"
+            android:padding="16dp"
+            android:autofillHints="emailAddress" />
 
-    <TextView
-        android:id="@+id/logInHereTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/log_in_here"
-        android:gravity="center_horizontal"/>
+        <EditText
+            android:id="@+id/registerPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/password"
+            android:background="@drawable/edit_text_background"
+            android:textColorHint="@color/colorHintGray"
+            android:textColor="@android:color/white"
+            android:padding="16dp"
+            android:inputType="textPassword"
+            android:importantForAutofill="no" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_background"
+            android:text="@string/register"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+        <TextView
+            android:id="@+id/logInHereTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/log_in_here"
+            android:gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+</FrameLayout>
